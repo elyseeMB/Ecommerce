@@ -3,21 +3,31 @@ import Organization from '#models/organization'
 import { inject } from '@adonisjs/core'
 import type { HttpContext } from '@adonisjs/core/http'
 import type { NextFn } from '@adonisjs/core/types/http'
+import GetActiveOrganization from '../actions/organizations/http/get_active_organization.js'
+import GetOrganizationUserRoleId from '../actions/organizations/get_organization_user_role_id.js'
 
 @inject()
 export default class OrganizationMiddleware {
-  constructor(protected getActiveOrganization: any) {}
+  constructor(protected getActiveOrganization: GetActiveOrganization) {}
 
   async handle(ctx: HttpContext, next: NextFn) {
-    const user = ctx.auth.use('web').user!
+    const user = ctx.auth.use('api').user!
 
     try {
       ctx.organizationId = ctx.request.cookie(activeCookieName)
+
+      const organization = await this.getActiveOrganization.handle()
+      const roleId = await GetOrganizationUserRoleId.handle({
+        organizationId: organization.id,
+        userId: user.id,
+      })
+
+      ctx.organization = organization
+      ctx.roleId = roleId
     } catch (_) {}
     /**
      * Middleware logic goes here (before the next call)
      */
-    console.log(ctx)
 
     /**
      * Call next method in the pipeline and return its output
