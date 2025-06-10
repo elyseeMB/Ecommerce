@@ -1,0 +1,12 @@
+:root {
+  font-family: "Nunito Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+* {
+  ::before,
+  ::after,
+  body,
+  html {
+    box-sizing: border-box;
+  }
+}
