@@ -32,6 +32,15 @@ export default class OrganizationMiddleware {
     /**
      * Call next method in the pipeline and return its output
      */
+
+    const organizations = await user.related('organizations').query().orderBy('name')
+    ctx.organizations = organizations
+
+    ctx.response.send({
+      organization: ctx.organization,
+      organizations: organizations,
+    })
+
     const output = await next()
     return output
   }
@@ -40,6 +49,7 @@ export default class OrganizationMiddleware {
 declare module '@adonisjs/core/http' {
   export interface HttpContext {
     organizationId?: number
+    organizations: Organization[]
     organization: Organization
     roleId: number
   }

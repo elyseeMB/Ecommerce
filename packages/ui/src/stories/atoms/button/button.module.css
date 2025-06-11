@@ -1,59 +1,18 @@
-.Root {
-  width: 260px;
-}
+/* VARIANT */
+@import "./css/button_primary.css";
+@import "./css/button_secondary.css";
 
-.Field {
-  display: grid;
-  margin-bottom: 10px;
-}
+/* SIZE */
+@import "./css/button_small.css";
 
-.Label {
-  font-size: 15px;
-  font-weight: 500;
-  line-height: 35px;
-  color: black;
-}
-
-.Message {
-  font-size: 13px;
-  color: black;
-  opacity: 0.8;
-}
-
-.Input,
-.Textarea {
-  all: unset;
-  box-sizing: border-box;
-  width: 100%;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-  font-size: 15px;
-  color: black;
-  background-color: rgba(222, 222, 222, 0.155);
-  box-shadow: 0 0 0 1px rgba(128, 128, 128, 0.237);
-  &:hover {
-    box-shadow: 0 0 0 1px black;
-  }
-  &:focus {
-    box-shadow: 0 0 0 2px black;
-  }
-  &::selection {
-    background-color: var(--black-a6);
-    color: black;
-  }
-}
-
-.Input {
-  padding: 0 10px;
-  height: 35px;
-  line-height: 1;
-}
-
-.Textarea {
-  resize: none;
-  padding: 10px;
+:root {
+  --btn-primary-background: #466df9;
+  --btn-secondary-background: rgba(86, 86, 86, 0.073);
+  --color: rgb(33, 33, 33);
+  --rounded: 0.4rem;
+  --size: 16px;
+  --size-small: 14px;
+  --padding-button: 10px 15px;
 }
 
 .Button {
@@ -62,20 +21,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 4px;
-  padding: 0 15px;
-  font-size: 15px;
+  border-radius: var(--rounded);
+  padding: var(--padding-button);
+  font-size: var(--size);
   line-height: 1;
   font-weight: 500;
-  height: 35px;
-  width: 100%;
-  background-color: black;
-  color: white;
+  /* height: 35px; */
+  width: max-content;
+  background-color: var(--btn-primary-background);
   cursor: pointer;
-  &:hover {
-    background-color: rgba(52, 52, 52, 0.909);
-  }
-  &:focus {
-    box-shadow: 0 0 0 2px black;
-  }
 }

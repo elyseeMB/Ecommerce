@@ -10,9 +10,16 @@ import { Encryption } from '@adonisjs/core/encryption'
 export default class OrganizationsController {
   constructor(protected setActiveOrganization: setActiveOrganization) {}
 
-  async create({ auth, response, organizationId, organization, roleId }: HttpContext) {
+  async create({
+    auth,
+    response,
+    organizationId,
+    organization,
+    roleId,
+    organizations,
+  }: HttpContext) {
     const a = auth.user
-    return response.json({ a, organization: organization, organizationId, roleId })
+    return response.json({ a, organization: organization, organizationId, roleId, organizations })
   }
 
   async store({ request, response, auth, organizationId }: HttpContext) {

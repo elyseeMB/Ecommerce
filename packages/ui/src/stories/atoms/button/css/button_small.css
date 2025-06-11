@@ -1,0 +1,8 @@
+.Button.small {
+  --padding-button: 0.2rem 0.6rem;
+  --height: calc(1.8 * var(--size));
+  font-size: var(--size-small);
+  height: var(--height);
+  padding: var(--padding-button);
+  border-radius: var(--rounded);
+}

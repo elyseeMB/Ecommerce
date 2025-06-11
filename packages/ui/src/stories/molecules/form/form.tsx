@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Form } from "radix-ui";
 import styles from "./form.module.css";
-import { FieldForm } from "../../atoms/field/field.tsx";
+import { FieldForm } from "../field/field.tsx";
 import { Button } from "../../atoms/button/button.tsx";
 
 type Params = {
@@ -11,7 +11,12 @@ type Params = {
 
 const FormDemo = () => (
   <FormComponent className={styles.Root}>
-    <FieldForm name="email" label="Please enter your email" type="email" />
+    <FieldForm
+      name="email"
+      label="Please enter your email"
+      type="email"
+      message
+    />
     <Form.Field className={styles.Field} name="question">
       <div
         style={{

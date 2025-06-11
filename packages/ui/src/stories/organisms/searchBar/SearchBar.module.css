@@ -1,0 +1,59 @@
+:root {
+  --btn-primary-background: #466df9;
+  --btn-secondary-background: rgba(86, 86, 86, 0.073);
+  --color: rgb(33, 33, 33);
+  --rounded: 0.4rem;
+  --size: 16px;
+  --size-small: 14px;
+  --padding-button: 10px 15px;
+}
+
+.SearchBar {
+  --rounded: 0.6rem;
+  background-color: transparent;
+  color: var(--color);
+  box-shadow: inset 0 0px 0 1px rgb(219 219 219 / 66%);
+  border-radius: var(--rounded);
+  color: var(--color);
+  padding: var(--padding-button);
+  transition: background-color 0.2s;
+  width: max-content;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.Input input {
+  margin: 0;
+  padding: 0;
+  height: auto;
+  border: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.Control {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.SearchBar input::selection {
+  background: rgba(43, 43, 255, 0.824);
+  color: white !important;
+}
+
+.Item {
+  padding: 0.5rem;
+  width: 16px;
+  font-size: 12px;
+  display: flex;
+  color: var(--color);
+  opacity: 0.6;
+  align-items: center;
+  font-weight: 700;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+  background: var(--btn-secondary-background);
+  border-radius: var(--rounded);
+}
