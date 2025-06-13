@@ -1,0 +1,9 @@
+.Wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.Container {
+  /* background: red; */
+}

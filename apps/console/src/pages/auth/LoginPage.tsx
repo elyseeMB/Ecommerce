@@ -1,28 +1,38 @@
 import React from "react";
 import { Button, FieldForm, FormComponent } from "@ui/website";
 import { useState } from "react";
+import { useData, useUpdateData } from "../../store.tsx";
+import { useAuth } from "../../hooks/useAuth.ts";
 
 export default function LoginPage() {
   const [token, setToken] = useState("");
+  const { login } = useAuth();
+  const data = useData();
+
+  console.log(data);
+
+  const updateData = useUpdateData();
 
   const handleSubmit: React.FormEventHandler = (e) => {
     e.preventDefault();
     const element = e.currentTarget as HTMLFormElement;
     const form = new FormData(element);
     const doc = Object.fromEntries(form);
+    // console.log({ ...doc });
+    login(form.get("fullName"), form.get("email"), form.get("password"));
     // console.log(doc);
-    fetch("http://localhost:3333/register", {
-      method: "POST",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(doc),
-    })
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res), setToken(res.token);
-      });
+    // fetch("http://localhost:3333/register", {
+    //   method: "POST",
+    //   credentials: "include",
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    //   body: JSON.stringify(doc),
+    // })
+    //   .then((res) => res.json())
+    //   .then((res) => {
+    //     console.log(res), setToken(res.token);
+    //   });
   };
 
   console.log(token);
@@ -54,11 +64,16 @@ export default function LoginPage() {
         <Button type="submit" children="send" />
       </FormComponent>
 
-      <h1>Organization</h1>
+      {/* <h1>Organization</h1>
       <FormComponent onSubmit={handleSubmitOrganization}>
         <FieldForm type="text" label="Organization" name="name" />
         <Button type="submit" children="send" />
-      </FormComponent>
+      </FormComponent> */}
+
+      {data.name}
+      <button onClick={() => updateData({ name: "nouveau nom 4" })}>
+        changer de nom
+      </button>
     </>
   );
 }

@@ -58,7 +58,7 @@ export function NavigationMenu() {
 
         <Menu.Item>
           <Menu.Trigger className={styles.Trigger}>
-            Overview{" "}
+            Overview
             <Icon
               className={styles.CaretDown}
               aria-hidden

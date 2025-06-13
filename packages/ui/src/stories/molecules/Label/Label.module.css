@@ -1,0 +1,10 @@
+.Root {
+  font-size: 15px;
+  font-weight: 500;
+  line-height: 35px;
+  color: black;
+}
+
+.Input {
+  width: 100%;
+}

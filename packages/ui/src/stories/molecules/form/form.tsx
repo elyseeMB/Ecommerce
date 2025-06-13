@@ -34,7 +34,13 @@ const FormDemo = () => (
         <textarea className={styles.Textarea} required />
       </Form.Control>
     </Form.Field>
-    <Button type="submit">Post question</Button>
+    <Button
+      variant="primary"
+      style={{ width: "100%", textAlign: "center" }}
+      type="submit"
+    >
+      Post question
+    </Button>
   </FormComponent>
 );
 

@@ -3,15 +3,29 @@ import React, {
   type PropsWithChildren,
   type ReactElement,
 } from "react";
-import { Outlet, createBrowserRouter, type RouteObject } from "react-router";
+import {
+  Navigate,
+  Outlet,
+  createBrowserRouter,
+  useRouteError,
+  type RouteObject,
+} from "react-router";
 
 import { lazy, type FC, type LazyExoticComponent } from "react";
+import { UnAuthenticatedError } from "@helpers/website";
+import {
+  AuthLayout,
+  CenteredLayout,
+  CenteredLayoutSkeleton,
+} from "@ui/website";
 
-type AppRoutes = {
-  path: string;
-  component: FC<any> | LazyExoticComponent<FC<any>> | ReactElement;
-  children?: AppRoutes[];
-};
+function ErrorBoundary() {
+  const error = useRouteError();
+  if (error instanceof UnAuthenticatedError) {
+    return <Navigate to="auth/login" />;
+  }
+  return <div>error</div>;
+}
 
 export default function Text() {
   return (
@@ -22,34 +36,57 @@ export default function Text() {
   );
 }
 
+type AppRoutes = {
+  Component: FC<any> | LazyExoticComponent<FC<any>> | ReactElement;
+  children?: AppRoutes[];
+  fallback?: FC;
+} & Omit<RouteObject, "Component" | "children">;
+
 const routes = [
   {
     path: "/auth",
-    component: Text,
+    Component: AuthLayout,
     children: [
       {
         path: "login",
-        component: lazy(() => import("./pages/auth/LoginPage.tsx")),
+        Component: lazy(() => import("./pages/auth/LoginPage.tsx")),
+      },
+    ],
+  },
+  {
+    path: "/",
+    Component: CenteredLayout,
+    fallback: CenteredLayoutSkeleton,
+    ErrorBoundary: ErrorBoundary,
+    children: [
+      {
+        path: "",
+        Component: lazy(() => import("./pages/OrganizationsPage.tsx")),
       },
     ],
   },
 ] satisfies AppRoutes[];
 
-function routerTransformer(route: AppRoutes): RouteObject {
-  const { component, children, ...rest } = route;
+function routerTransformer({
+  fallback: FallbackComponent,
+  ...route
+}: AppRoutes): RouteObject {
+  let result = { ...route };
 
-  const element = React.isValidElement(component) ? (
-    component
-  ) : (
-    <Suspense fallback={<div>Chargement...</div>}>
-      {React.createElement(component as FC<any>)}
-    </Suspense>
-  );
+  if (FallbackComponent) {
+    result = {
+      ...result,
+      Component: (props) => (
+        <Suspense fallback={<FallbackComponent />}>
+          <route.Component {...props} />
+        </Suspense>
+      ),
+    };
+  }
 
   return {
-    ...rest,
-    element,
-    children: children?.map(routerTransformer),
+    ...result,
+    children: route.children?.map(routerTransformer) as RouteObject,
   };
 }
 
