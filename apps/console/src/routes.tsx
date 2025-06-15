@@ -48,6 +48,10 @@ const routes = [
     Component: AuthLayout,
     children: [
       {
+        path: "register",
+        Component: lazy(() => import("./pages/auth/RegisterPage.tsx")),
+      },
+      {
         path: "login",
         Component: lazy(() => import("./pages/auth/LoginPage.tsx")),
       },

@@ -5,7 +5,7 @@
   --rounded: 0.4rem;
   --size: 16px;
   --size-small: 14px;
-  --padding-button: 10px 15px;
+  --padding-button: 5px 15px;
 }
 
 .SearchBar {
@@ -23,13 +23,14 @@
   gap: 1rem;
 }
 
-.Input input {
+.SearchBar input {
   margin: 0;
   padding: 0;
   height: auto;
   border: none !important;
   background-color: transparent !important;
   box-shadow: none !important;
+  outline: none !important;
 }
 
 .Control {

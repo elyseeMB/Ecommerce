@@ -1,3 +1,9 @@
+.Wrapper {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
 .Root {
   width: 260px;
 }

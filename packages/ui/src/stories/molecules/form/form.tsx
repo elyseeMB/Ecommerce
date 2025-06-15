@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Form } from "radix-ui";
 import styles from "./form.module.css";
-import { FieldForm } from "../field/field.tsx";
+import { Field } from "../field/Field.tsx";
 import { Button } from "../../atoms/button/button.tsx";
 
 type Params = {
@@ -11,29 +11,14 @@ type Params = {
 
 const FormDemo = () => (
   <FormComponent className={styles.Root}>
-    <FieldForm
-      name="email"
-      label="Please enter your email"
-      type="email"
-      message
-    />
-    <Form.Field className={styles.Field} name="question">
-      <div
-        style={{
-          display: "flex",
-          alignItems: "baseline",
-          justifyContent: "space-between",
-        }}
-      >
-        <Form.Label className={styles.Label}>Question</Form.Label>
-        <Form.Message className={styles.Message} match="valueMissing">
-          Please enter a question
-        </Form.Message>
-      </div>
-      <Form.Control asChild>
-        <textarea className={styles.Textarea} required />
-      </Form.Control>
-    </Form.Field>
+    <Field name="email" label="Please enter your email" type="email" message />
+
+    <Field autogrow label="Question" type="textarea">
+      Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum possimus,
+      deserunt natus fugit omnis ex totam aperiam sapiente dolorum iure
+      repudiandae accusantium neque laboriosam officiis aliquam velit cumque.
+      Itaque, tempora.
+    </Field>
     <Button
       variant="primary"
       style={{ width: "100%", textAlign: "center" }}

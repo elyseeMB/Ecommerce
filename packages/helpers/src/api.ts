@@ -6,6 +6,7 @@ export async function apiFetch<T>(
   }: {
     method?: "POST" | "GET" | "DELETE" | "PUT";
     json?: Record<string, any> | undefined;
+    headers?: RequestInit["headers"];
   },
 ) {
   const endpoint = "http://localhost:3333";

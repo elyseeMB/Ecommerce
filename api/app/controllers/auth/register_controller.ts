@@ -9,14 +9,11 @@ export default class RegisterController {
   }
 
   @inject()
-  async store({ request, response }: HttpContext, webRegister: WebRegister) {
+  async store({ request, response, session }: HttpContext, webRegister: WebRegister) {
     const data = await request.validateUsing(registerValidator)
 
-    const { value, type } = await webRegister.handle({ data })
+    const { user } = await webRegister.handle({ data })
 
-    return response.json({
-      token: value,
-      type: type,
-    })
+    return response.json({ user, message: session.flash('success', 'Welcome my app') })
   }
 }

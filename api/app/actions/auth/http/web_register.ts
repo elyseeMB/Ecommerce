@@ -14,10 +14,22 @@ export class WebRegister {
 
   async handle({ data }: Params) {
     const user = await User.create(data)
-    const token = await this.ctx.auth.use('api').createToken(user)
 
-    return { type: 'bearer', value: token.value!.release() }
+    await this.ctx.auth.use('web').login(user)
+
+    return { user }
   }
+
+  // async #createToken(user: User) {
+  //   const userAgent = this.ctx.request.header('user-agent', 'Unknow')
+  //   const clientIp = this.ctx.request.ip()
+
+  //   const accessToken = await User.accessTokens.create(user, [], {
+  //     name: `Access - ${userAgent} - ${clientIp}`.toString(),
+  //   })
+
+  //   return accessToken
+  // }
 
   #checkForOrganizationInvite(user: User) {}
 }

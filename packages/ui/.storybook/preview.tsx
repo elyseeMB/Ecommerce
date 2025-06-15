@@ -1,4 +1,6 @@
+import react from "react";
 import type { Preview } from "@storybook/react-vite";
+import { IconSymbols } from "../src/stories/atoms/icon/Icon.tsx";
 
 import "../src/index.css";
 
@@ -11,6 +13,17 @@ const preview: Preview = {
       },
     },
   },
+
+  decorators: [
+    (Story, { parameters }) => {
+      return (
+        <>
+          <IconSymbols />
+          <Story />
+        </>
+      );
+    },
+  ],
 };
 
 export default preview;

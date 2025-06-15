@@ -1,5 +1,13 @@
 import vine from '@vinejs/vine'
 
+export const loginValidator = vine.compile(
+  vine.object({
+    email: vine.string().email().normalizeEmail(),
+    password: vine.string(),
+    remember: vine.boolean().optional(),
+  })
+)
+
 const emailRule = vine.string().maxLength(254).email().normalizeEmail()
 
 export const newEmailRule = emailRule.clone().unique(async (db, value) => {

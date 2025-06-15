@@ -1,52 +1,76 @@
-import { Form } from "radix-ui";
 import styles from "./field.module.css";
-import type { HTMLInputTypeAttribute, JSX } from "react";
+import type { ComponentProps, HTMLInputTypeAttribute, ReactNode } from "react";
+import { Input } from "../../atoms/input/Input.tsx";
+import type React from "react";
+import { Textarea } from "../../atoms/textarea/Textarea.tsx";
+import { Select } from "../../atoms/select/Select.tsx";
 
-type Params = {
-  name: string;
+type BaseProps<
+  T extends HTMLInputTypeAttribute | keyof React.JSX.IntrinsicElements,
+  P,
+> = {
+  name?: string;
+  id?: string;
   label?: string;
-  type?: HTMLInputTypeAttribute | undefined;
+  help?: string;
+  error?: string;
+  onValueChange?: (s: string) => void;
+  type?: T;
   placeholder?: string;
   message?: boolean;
-} & JSX.IntrinsicElements["input"];
+  children?: ReactNode;
+} & P;
 
-export function FieldForm({
-  name,
-  label,
-  type = "text",
-  placeholder,
-  message = false,
-  ...props
-}: Params) {
+type Props =
+  | BaseProps<never, ComponentProps<typeof Input>>
+  | BaseProps<"text", ComponentProps<typeof Input>>
+  | BaseProps<"email", ComponentProps<typeof Input>>
+  | BaseProps<"password", ComponentProps<typeof Input>>
+  | BaseProps<"textarea", ComponentProps<typeof Textarea>>
+  | BaseProps<"select", ComponentProps<typeof Select>>;
+
+export function Field(props: Props) {
+  const showHelp = props.help && !props.error;
+  const childrenAsInput = !props.type && props.children;
   return (
-    <Form.Field className={styles.Field} name={name} {...props}>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "baseline",
-          justifyContent: "space-between",
-        }}
-      >
-        <Form.Label className={styles.Label}> {label}</Form.Label>
-        {message && (
-          <>
-            <Form.Message className={styles.Message} match="valueMissing">
-              Please enter your email
-            </Form.Message>
-            <Form.Message className={styles.Message} match="typeMismatch">
-              Please provide a valid email
-            </Form.Message>
-          </>
-        )}
-      </div>
-      <Form.Control asChild>
-        <input
-          placeholder={placeholder}
-          className={styles.Input}
-          type={type}
-          required
-        />
-      </Form.Control>
-    </Form.Field>
+    <div className={styles.Wrapper}>
+      {props.label && <label htmlFor={props.name}> {props.label} </label>}
+      {childrenAsInput ? props.children : getInput(props)}
+      {showHelp && <span className={styles.Help}> {props.help} </span>}
+      {props.error && <span className={styles.Error}> {props.error} </span>}
+    </div>
   );
+}
+
+function getInput(props: Props) {
+  const { type, onValueChange, ...restPros } = props;
+
+  const baseProps = {
+    name: props.name,
+    id: props.id,
+    placeholder: props.placeholder,
+  };
+
+  switch (type) {
+    case "select":
+      return (
+        // @ts-expect-error Select is too dynamic
+        <Select {...baseProps} {...restPros} />
+      );
+    case "textarea":
+      return (
+        // @ts-expect-error Textarea is too dynamic
+        <Textarea {...baseProps} {...restPros} />
+      );
+    default:
+      return (
+        <Input
+          type={type}
+          // @ts-expect-error Input is too dynamic
+          onChange={(e) => onValueChange?.(e.currentTarget.value)}
+          {...baseProps}
+          {...restPros}
+        />
+      );
+  }
 }

@@ -22,10 +22,10 @@ export default class OrganizationsController {
     return response.json({ a, organization: organization, organizationId, roleId, organizations })
   }
 
-  async store({ request, response, auth, organizationId }: HttpContext) {
+  async store({ request, response, auth }: HttpContext) {
     const data = await request.validateUsing(organizationValidator)
     const organization = await StoreOrganization.handle({
-      user: auth.use('api').user,
+      user: auth.use('web').user!,
       data,
     })
 

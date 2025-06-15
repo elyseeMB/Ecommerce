@@ -1,20 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { FieldForm } from "./field.tsx";
-import { Form } from "radix-ui";
+import { Field } from "./Field.tsx";
 
 const meta = {
   title: "Molecules/field",
-  decorators: [
-    (Story) => (
-      <>
-        <Form.Root>
-          <Story />
-        </Form.Root>
-      </>
-    ),
-  ],
-  component: FieldForm,
-} satisfies Meta<typeof FieldForm>;
+
+  component: Field,
+} satisfies Meta<typeof Field>;
 
 export default meta;
 
@@ -22,8 +13,15 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    name: "email",
-    label: "Email",
-    type: "email",
+    label: "Label",
+    name: "id",
+    help: "e.g. This is a hint",
+  },
+};
+
+export const Invalid: Story = {
+  args: {
+    ...Default.args,
+    error: "This is an error",
   },
 };

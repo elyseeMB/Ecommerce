@@ -4,10 +4,9 @@ import { organizationValidator } from '#validators/organization'
 import db from '@adonisjs/lucid/services/db'
 import { Infer } from '@vinejs/vine/types'
 import Roles from '../../enums/roles.js'
-import { AccessToken } from '@adonisjs/auth/access_tokens'
 
 type Params = {
-  user: (User & { currentAccessToken: AccessToken }) | undefined
+  user: User
   data: Infer<typeof organizationValidator>
 }
 
@@ -27,10 +26,7 @@ export default class StoreOrganization {
     })
   }
 
-  static async #assignAdmin(
-    organization: Organization,
-    user: (User & { currentAccessToken: AccessToken }) | undefined
-  ) {
+  static async #assignAdmin(organization: Organization, user: User) {
     if (!user) {
       return
     }

@@ -37,14 +37,19 @@ export function useAuth() {
       });
   }, []);
 
-  const login = useCallback(
-    (fullName: string, email: string, password: string) => {
-      apiFetch<Account>("/login", { json: { fullName, email, password } }).then(
-        updateAccount,
-      );
-    },
-    [],
-  );
+  // AUTH
+  const register = useCallback((data: Record<string, any>) => {
+    apiFetch<Account>("/register", { json: data })
+      .then(updateAccount)
+      .catch(() => {
+        updateAccount(null);
+        throw new UnAuthenticatedError();
+      });
+  }, []);
+
+  const login = useCallback((data: Record<string, any>) => {
+    apiFetch<Account>("/login", { json: data }).then(updateAccount);
+  }, []);
 
   const logout = useCallback(() => {
     apiFetch<Account>("/logout", { method: "DELETE" }).then(updateAccount);
@@ -54,6 +59,7 @@ export function useAuth() {
     account,
     status,
     authenticate,
+    register,
     login,
     logout,
   };

@@ -1,6 +1,6 @@
 import { Label as LabelComponent } from "radix-ui";
 import styles from "./Label.module.css";
-import { FieldForm } from "../field/field.tsx";
+import { Field } from "../field/Field.tsx";
 
 export function Label({
   label,
@@ -23,7 +23,7 @@ export function Label({
       <LabelComponent.Root className={styles.Root} htmlFor="firstName">
         {label}
       </LabelComponent.Root>
-      <FieldForm
+      <Field
         name={name}
         className={styles.Input}
         type="text"

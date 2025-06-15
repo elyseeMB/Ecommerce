@@ -6,7 +6,7 @@ import {
   type PropsWithChildren,
 } from "react";
 import { create, useStore as useZustandStore } from "zustand";
-import { persist, combine } from "zustand/middleware";
+import { combine, persist } from "zustand/middleware";
 import type { Account } from "./hooks/useAuth.ts";
 
 type State = {
@@ -31,7 +31,7 @@ const createStore = (data: Params) =>
         }),
       ),
       {
-        name: "data",
+        name: "account",
       },
     ),
   );
@@ -80,5 +80,12 @@ export function useUpdateAccount() {
 }
 
 export function useAccount() {
-  return useStore((state) => state.account);
+  const account = useStore((state) => state.account);
+
+  if (!account) {
+    throw new UnAuthenticatedError();
+  }
+  return {
+    ...account,
+  };
 }

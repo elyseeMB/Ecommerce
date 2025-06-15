@@ -1,6 +1,5 @@
-import { FieldForm } from "../../molecules/field/field.tsx";
+import { Field } from "../../molecules/field/Field.tsx";
 import { Icon } from "../../atoms/icon/Icon.tsx";
-import { FormComponent } from "../../molecules/form/form.tsx";
 import styles from "./SearchBar.module.css";
 
 type Params = {
@@ -11,13 +10,7 @@ export function SearchBar({ size = 16 }: Params) {
   return (
     <div className={styles.SearchBar}>
       <Icon size={size} name="SearchLine" />
-      <FormComponent>
-        <FieldForm
-          className={styles.Input}
-          name="search"
-          placeholder="Search here..."
-        />
-      </FormComponent>
+      <Field name="search" placeholder="Search here..." />
       <div className={styles.Control}>
         <span className={styles.Item}>
           <Icon size={size} name="CommandLine" />
