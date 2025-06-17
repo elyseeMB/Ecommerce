@@ -11,12 +11,13 @@ export default class OrganizationMiddleware {
   constructor(protected getActiveOrganization: GetActiveOrganization) {}
 
   async handle(ctx: HttpContext, next: NextFn) {
-    const user = ctx.auth.use('api').user!
+    const user = ctx.auth.use('web').user!
 
     try {
       ctx.organizationId = ctx.request.cookie(activeCookieName)
 
       const organization = await this.getActiveOrganization.handle()
+
       const roleId = await GetOrganizationUserRoleId.handle({
         organizationId: organization.id,
         userId: user.id,

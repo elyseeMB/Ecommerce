@@ -28,6 +28,6 @@ export default class GetActiveOrganization {
   }
 
   #query() {
-    return this.ctx.auth.use('api').user!.related('organizations').query().preload('users')
+    return this.ctx.auth.use('web').user!.related('organizations').query().preload('users')
   }
 }

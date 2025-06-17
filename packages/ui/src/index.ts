@@ -7,3 +7,6 @@ export { FormComponent } from "./stories/molecules/form/form.tsx";
 export { AuthLayout } from "./layouts/auth/AuthLayout.tsx";
 export { CenteredLayout } from "./layouts/base/CenteredLayout.tsx";
 export { CenteredLayoutSkeleton } from "./layouts/base/CenteredLayout.tsx";
+
+// ORGANISMS
+export { Header } from "./stories/organisms/header/Header.tsx";

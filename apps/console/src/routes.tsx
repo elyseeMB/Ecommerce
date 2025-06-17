@@ -65,7 +65,11 @@ const routes = [
     children: [
       {
         path: "",
-        Component: lazy(() => import("./pages/OrganizationsPage.tsx")),
+        Component: lazy(() => import("./pages/organizations/Create.tsx")),
+      },
+      {
+        path: "courses",
+        Component: lazy(() => import("./pages/courses/View.tsx")),
       },
     ],
   },

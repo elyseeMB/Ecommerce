@@ -9,6 +9,7 @@
 
 const SessionController = () => import('#controllers/session_controller')
 const OrganizationsController = () => import('#controllers/organizations_controller')
+const CoursesController = () => import('#controllers/courses_controller')
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 
@@ -23,3 +24,10 @@ router
     router.post('/organizations', [OrganizationsController, 'store']).as('organizations.store')
   })
   .use(middleware.auth({ guards: ['web'] }))
+
+router
+  .group(() => {
+    /* COURSES */
+    router.get('/courses', [CoursesController, 'index']).as('course.index')
+  })
+  .use([middleware.auth({ guards: ['web'] }), middleware.organization()])

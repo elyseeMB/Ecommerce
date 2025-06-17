@@ -12,6 +12,7 @@ import type { Account } from "./hooks/useAuth.ts";
 type State = {
   data: Params;
   account: undefined | null | Account;
+  organization: Record<string, any>;
 };
 type Params = {
   name: string;
@@ -24,8 +25,11 @@ const createStore = (data: Params) =>
         {
           account: undefined as undefined | null | Account,
           data,
+          organization: {},
         } as State,
         (set) => ({
+          updateOrganization: (newDate: Record<string, any>) =>
+            set({ organization: newDate }),
           updateData: (newData: Params) => set({ data: newData }),
           updateAccount: (account: Account | null) => set({ account }),
         }),
@@ -69,6 +73,14 @@ function useStore<T>(selector: (state: StoreState) => T) {
 
 export function useData() {
   return useStore((state) => state.data);
+}
+
+export function useOrganization() {
+  return useStore((state) => state.organization);
+}
+
+export function useUpdateOrganization() {
+  return useStore((state) => state.updateOrganization);
 }
 
 export function useUpdateData() {

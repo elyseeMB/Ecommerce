@@ -2,10 +2,12 @@ import styles from "./CenteredLayout.module.css";
 import type { PropsWithChildren } from "react";
 import { Outlet } from "react-router";
 import { Skeleton } from "../../stories/atoms/skeleton/Skeleton.tsx";
+import { Header } from "../../stories/organisms/header/Header.tsx";
 
 export function CenteredLayout({ children }: PropsWithChildren) {
   return (
     <div className={styles.Wrapper}>
+      <Header />
       <div className={styles.Container}>{children ?? <Outlet />}</div>
     </div>
   );
