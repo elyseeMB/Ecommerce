@@ -2,8 +2,9 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding-inline: 2rem;
+  background: white;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  padding: 15px 20px;
   font-family: "Nunito Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
@@ -29,4 +30,9 @@
   margin-right: 10px;
   color: #333;
   font-size: 14px;
+}
+
+.header .actions {
+  display: flex;
+  align-items: center;
 }

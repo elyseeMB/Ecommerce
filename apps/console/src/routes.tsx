@@ -18,6 +18,8 @@ import {
   CenteredLayout,
   CenteredLayoutSkeleton,
 } from "@ui/website";
+import { Room } from "./pages/Room.tsx";
+import { MainLayout } from "./layouts/MainLayout.tsx";
 
 function ErrorBoundary() {
   const error = useRouteError();
@@ -58,15 +60,23 @@ const routes = [
     ],
   },
   {
-    path: "/",
+    path: "/organizations",
     Component: CenteredLayout,
     fallback: CenteredLayoutSkeleton,
     ErrorBoundary: ErrorBoundary,
     children: [
       {
-        path: "",
+        path: "create",
         Component: lazy(() => import("./pages/organizations/Create.tsx")),
       },
+    ],
+  },
+  {
+    path: "/",
+    Component: MainLayout,
+    fallback: CenteredLayoutSkeleton,
+    ErrorBoundary: ErrorBoundary,
+    children: [
       {
         path: "courses",
         Component: lazy(() => import("./pages/courses/View.tsx")),

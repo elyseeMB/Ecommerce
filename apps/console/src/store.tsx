@@ -10,27 +10,21 @@ import { combine, persist } from "zustand/middleware";
 import type { Account } from "./hooks/useAuth.ts";
 
 type State = {
-  data: Params;
-  account: undefined | null | Account;
+  account: undefined | null | Record<string, any>;
   organization: Record<string, any>;
 };
-type Params = {
-  name: string;
-};
 
-const createStore = (data: Params) =>
+const createStore = () =>
   create(
     persist(
       combine(
         {
           account: undefined as undefined | null | Account,
-          data,
           organization: {},
         } as State,
         (set) => ({
           updateOrganization: (newDate: Record<string, any>) =>
             set({ organization: newDate }),
-          updateData: (newData: Params) => set({ data: newData }),
           updateAccount: (account: Account | null) => set({ account }),
         }),
       ),
@@ -50,11 +44,8 @@ type StoreState = Store extends {
 
 const StoreContext = createContext<{ store?: Store }>({});
 
-export function StoreProvider({
-  children,
-  data,
-}: PropsWithChildren<{ data: Params }>) {
-  const store = useMemo(() => createStore(data), []);
+export function StoreProvider({ children }: PropsWithChildren) {
+  const store = useMemo(() => createStore(), []);
 
   return (
     <StoreContext.Provider value={{ store: store }}>
@@ -63,16 +54,12 @@ export function StoreProvider({
   );
 }
 
-function useStore<T>(selector: (state: StoreState) => T) {
+export function useStore<T>(selector: (state: StoreState) => T) {
   const store = useContext(StoreContext).store;
   if (!store) {
     throw new Error("A context need to be provider to use the store");
   }
   return useZustandStore(store, selector);
-}
-
-export function useData() {
-  return useStore((state) => state.data);
 }
 
 export function useOrganization() {
@@ -83,20 +70,24 @@ export function useUpdateOrganization() {
   return useStore((state) => state.updateOrganization);
 }
 
-export function useUpdateData() {
-  return useStore((state) => state.updateData);
-}
-
 export function useUpdateAccount() {
   return useStore((state) => state.updateAccount);
 }
 
-export function useAccount() {
+export function useIsAuth() {
   const account = useStore((state) => state.account);
 
   if (!account) {
     throw new UnAuthenticatedError();
   }
+  return {
+    ...account,
+  };
+}
+
+export function useAccount() {
+  const account = useStore((state) => state.account);
+
   return {
     ...account,
   };

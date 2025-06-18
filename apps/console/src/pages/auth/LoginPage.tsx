@@ -14,7 +14,7 @@ export default function LoginPage() {
     const doc = Object.fromEntries(form);
 
     login(doc);
-    navigate("/");
+    navigate("/organizations/create");
   };
 
   return (

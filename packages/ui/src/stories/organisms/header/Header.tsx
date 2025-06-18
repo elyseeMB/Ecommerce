@@ -1,6 +1,6 @@
 import styles from "./Header.module.css";
 import { Button } from "../../atoms/button/button.tsx";
-import { NavigationMenu } from "../NavigationMenu/NavigationMenu.tsx";
+import { type ReactNode } from "react";
 
 type User = {
   name: string;
@@ -11,6 +11,7 @@ export type HeaderProps = {
   onLogin?: () => void;
   onLogout?: () => void;
   onCreateAccount?: () => void;
+  children: ReactNode;
 };
 
 export const Header = ({
@@ -18,6 +19,7 @@ export const Header = ({
   onLogin,
   onLogout,
   onCreateAccount,
+  children,
 }: HeaderProps) => (
   <header>
     <div className={styles.header}>
@@ -45,17 +47,17 @@ export const Header = ({
         </svg>
         <h1>Acme</h1>
       </div>
-      <NavigationMenu />
-      <div>
+      {children}
+      <>
         {user ? (
-          <>
+          <div className={styles.actions}>
             <span className={styles.welcome}>
               Welcome, <b>{user.name}</b>!
             </span>
             <Button size="small" onClick={onLogout} children="Log out" />
-          </>
+          </div>
         ) : (
-          <>
+          <div className={styles.actions}>
             <Button size="small" onClick={onLogin} children="Log in" />
             <Button
               variant="primary"
@@ -63,9 +65,9 @@ export const Header = ({
               onClick={onCreateAccount}
               children="Sign up"
             />
-          </>
+          </div>
         )}
-      </div>
+      </>
     </div>
   </header>
 );
