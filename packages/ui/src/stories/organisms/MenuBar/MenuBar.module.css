@@ -1,0 +1,128 @@
+:root {
+  --btn-primary-background: #466df9;
+  --btn-secondary-background: rgba(86, 86, 86, 0.073);
+  --color: rgb(33, 33, 33);
+  --rounded: 0.4rem;
+  --size: 16px;
+  --size-small: 14px;
+  --padding-button: 10px 15px;
+  --shadow: inset 0 0px 0 1px rgb(219 219 219 / 66%);
+}
+
+.Root {
+  display: flex;
+  background-color: white;
+  gap: 1rem;
+  padding: 0.5rem;
+  border-radius: 6px;
+}
+
+.Trigger {
+  all: unset;
+  padding: 0.7rem 1rem;
+  outline: none;
+  user-select: none;
+  font-weight: 500;
+  line-height: 1;
+  border-radius: 4px;
+  color: var(--color);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2px;
+}
+
+.Trigger[data-highlighted],
+.Trigger[data-state="open"] {
+  color: black;
+  background-color: var(--btn-secondary-background);
+}
+
+.Content,
+.SubContent {
+  min-width: 220px;
+  background-color: white;
+  border-radius: 6px;
+  padding: 0.5rem;
+  box-shadow: var(--shadow);
+  animation-duration: 400ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform, opacity;
+}
+
+.Item,
+.SubTrigger,
+.CheckboxItem,
+.RadioItem {
+  all: unset;
+  line-height: 1;
+  color: currentColor;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  padding: 1rem 0.8rem;
+  position: relative;
+  user-select: none;
+}
+
+.Item:global(.inset),
+.SubTrigger:global(.inset),
+.CheckboxItem:global(.inset),
+.RadioItem:global(.inset) {
+  padding-left: 20px;
+}
+
+.Item:hover {
+  background-color: var(--btn-secondary-background);
+}
+
+.Item[data-state="open"],
+.SubTrigger[data-state="open"] {
+  background-color: rgb(230, 230, 230);
+  color: black;
+}
+
+.Item[data-highlighted],
+.SubTrigger[data-highlighted],
+.CheckboxItem[data-highlighted],
+.RadioItem[data-highlighted] {
+  background-image: green;
+  color: var(--violet-1);
+}
+
+.Item[data-disabled],
+.SubTrigger[data-disabled],
+.CheckboxItem[data-disabled],
+.RadioItem[data-disabled] {
+  color: var(--mauve-8);
+  pointer-events: none;
+}
+
+.ItemIndicator {
+  position: absolute;
+  left: 0;
+  width: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Separator {
+  height: 1px;
+  background-color: rgb(205, 205, 205);
+  margin: 5px;
+}
+
+.RightSlot {
+  margin-left: auto;
+  padding-left: 20px;
+  color: var(--mauve-9);
+}
+
+[data-highlighted] > .RightSlot {
+  color: white;
+}
+
+[data-disabled] > .RightSlot {
+  color: var(--mauve-8);
+}

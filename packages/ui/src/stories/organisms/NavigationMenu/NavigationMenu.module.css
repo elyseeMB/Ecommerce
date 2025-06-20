@@ -38,9 +38,9 @@
   border-radius: var(--rounded);
   font-size: 15px;
   color: var(--color);
-  /* &:focus {
-    box-shadow: 0 0 0 2px var(--violet-7);
-  } */
+  &:focus {
+    box-shadow: 0 0 0 2px black;
+  }
   &:hover {
     background-color: rgba(189, 189, 189, 0.16);
   }

@@ -38,7 +38,7 @@ export function ContainerMenu({ children }: { children: ReactNode }) {
   return <Menu.List className={styles.MenuList}>{children}</Menu.List>;
 }
 
-export function NavigationMenu({ children }: { children: ReactNode }) {
+export function NavigationMenu({ children }: { children?: ReactNode }) {
   return (
     <Menu.Root className={styles.Root}>
       {children}
