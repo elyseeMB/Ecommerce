@@ -18,3 +18,4 @@ export { Item } from "./stories/organisms/NavigationMenu/NavigationMenu.tsx";
 export { ContainerMenu } from "./stories/organisms/NavigationMenu/NavigationMenu.tsx";
 export { NavigationMenu } from "./stories/organisms/NavigationMenu/NavigationMenu.tsx";
 export { ListItem } from "./stories/organisms/NavigationMenu/NavigationMenu.tsx";
+export { Table, TableHeader } from "./stories/organisms/table/Table.tsx";

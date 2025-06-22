@@ -1,3 +1,4 @@
+import presetLegacyCompat from "@unocss/preset-legacy-compat";
 import { UserConfig, mergeConfigs, presetWind4 } from "unocss";
 
 export default (config: UserConfig = {}) =>
@@ -10,7 +11,12 @@ export default (config: UserConfig = {}) =>
             reset: true,
           },
         }),
+        presetLegacyCompat({
+          commaStyleColorFunction: true,
+          legacyColorSpace: true,
+        }),
       ],
+
       theme: {
         colors: {
           background: "hsl(var(--background))",

@@ -171,6 +171,9 @@ importers:
         specifier: ^66.2.3
         version: 66.2.3(postcss@8.5.6)(vite@6.3.5)(vue@3.5.17)
     devDependencies:
+      '@unocss/preset-legacy-compat':
+        specifier: ^66.2.3
+        version: 66.2.3
       typescript:
         specifier: ~5.8.3
         version: 5.8.3
@@ -3926,6 +3929,12 @@ packages:
       ofetch: 1.4.1
     transitivePeerDependencies:
       - supports-color
+
+  /@unocss/preset-legacy-compat@66.2.3:
+    resolution: {integrity: sha512-fAzU1Ogk476MS4uoH6PZTEtGFEDUUG3SwHK+Eqij/oK7rTRgmPsj6+kkhx3I16aaH8ETdhI0l1/jhv7jZf8faA==}
+    dependencies:
+      '@unocss/core': 66.2.3
+    dev: true
 
   /@unocss/preset-mini@66.2.3:
     resolution: {integrity: sha512-qGdpp5ZiekR0QREFzc5eOTjMaYT3FWs9wQJqYKZNY3OJ8wMFpgDVoDTpqdfgvCiL7hheYITuxLDHw0gp/vDGBw==}
