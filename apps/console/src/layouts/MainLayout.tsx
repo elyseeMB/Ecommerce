@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, type PropsWithChildren } from "react";
 import { AuthStatus, useAuth } from "../hooks/useAuth.ts";
 import { UnAuthenticatedError } from "@helpers/website";
 import { useAccount } from "../store.tsx";
@@ -12,8 +12,9 @@ import {
   Trigger,
 } from "@ui/website";
 import { Icon } from "@ui/website/src/stories/atoms/icon/Icon.tsx";
+import { Outlet } from "react-router";
 
-export function MainLayout() {
+export function MainLayout({ children }: PropsWithChildren) {
   const account = useAccount();
   const { status } = useAuth();
 
@@ -106,9 +107,7 @@ export function MainLayout() {
           </ContainerMenu>
         </NavigationMenu>
       </Header>
-      <div className="container">
-        <div className="wrapper">hello {account.user.fullName}</div>
-      </div>
+      <div className="container">{children ?? <Outlet />}</div>
     </div>
   );
 }

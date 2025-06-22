@@ -1,0 +1,15 @@
+{
+  "name": "@tooling/website",
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    "./unocss": "./src/unocss/unocss.config.ts"
+  },
+  "keywords": [],
+  "dependencies": {
+    "unocss": "^66.2.3"
+  },
+  "devDependencies": {
+    "typescript": "~5.8.3"
+  }
+}

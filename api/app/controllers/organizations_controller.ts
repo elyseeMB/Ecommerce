@@ -31,6 +31,6 @@ export default class OrganizationsController {
 
     this.setActiveOrganization.handle({ id: organization.id })
 
-    return response.json({ organization })
+    return response.json(organization)
   }
 }
