@@ -1,24 +1,18 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column, hasMany } from '@adonisjs/lucid/orm'
 import { compose } from '@adonisjs/core/helpers'
 import { WithOrganization } from './mixins/with_organization.js'
-import Difficulty from './difficulty.js'
-import type { BelongsTo } from '@adonisjs/lucid/types/relations'
-import Module from 'module'
+import Course from './course.js'
+import type { BelongsTo, HasMany } from '@adonisjs/lucid/types/relations'
 import Status from './status.js'
-import AccessLevel from './access_level.js'
+import Lesson from './lesson.js'
 
-export default class Course extends compose(BaseModel, WithOrganization) {
-  serializeExtras = true
-
+export default class Module extends compose(BaseModel, WithOrganization) {
   @column({ isPrimary: true })
   declare id: number
 
   @column()
-  declare accessLevelId: number
-
-  @column()
-  declare difficultyId: number
+  declare courseId: number
 
   @column()
   declare statusId: number
@@ -38,12 +32,12 @@ export default class Course extends compose(BaseModel, WithOrganization) {
   @column.dateTime({ autoCreate: true, autoUpdate: true })
   declare updatedAt: DateTime
 
-  @belongsTo(() => AccessLevel)
-  declare accessLevel: BelongsTo<typeof AccessLevel>
-
-  @belongsTo(() => Difficulty)
-  declare difficulty: BelongsTo<typeof Difficulty>
+  @belongsTo(() => Course)
+  declare course: BelongsTo<typeof Course>
 
   @belongsTo(() => Status)
   declare status: BelongsTo<typeof Status>
+
+  @hasMany(() => Lesson)
+  declare lessons: HasMany<typeof Lesson>
 }

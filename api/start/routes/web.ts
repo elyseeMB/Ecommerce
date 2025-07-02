@@ -29,5 +29,6 @@ router
   .group(() => {
     /* COURSES */
     router.get('/courses', [CoursesController, 'index']).as('course.index')
+    router.post('/courses', [CoursesController, 'store']).as('courses.store')
   })
   .use([middleware.auth({ guards: ['web'] }), middleware.organization()])

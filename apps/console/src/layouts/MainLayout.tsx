@@ -31,7 +31,7 @@ export function MainLayout({ children }: PropsWithChildren) {
         {organization.name}
         <NavigationMenu>
           <ContainerMenu>
-            {account.user.fullName}
+            {account.fullName}
             <Item>
               <Trigger
                 title="Courses"

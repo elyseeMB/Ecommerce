@@ -1,19 +1,29 @@
 import { apiFetch } from "@helpers/website";
 import { useAsyncEffect } from "../../hooks/useAsyncEffect.tsx";
 import { useAccount, useOrganization } from "../../store.tsx";
+import type { FormEvent, FormEventHandler } from "react";
 
 export default function CoursesPage() {
   const account = useAccount();
   const organization = useOrganization();
 
+  console.log(organization);
 
-  console.log(organization)
-
-  console.log('Bonjour les gens')
+  console.log("Bonjour les gens");
 
   useAsyncEffect(async () => {
     const data = await apiFetch("/courses");
   }, []);
+
+  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+    const element = e.currentTarget;
+    const form = new FormData(element);
+
+    const res = apiFetch("/courses", { json: Object.fromEntries(form) });
+
+    console.log(res);
+  };
 
   return (
     <>
@@ -29,7 +39,24 @@ export default function CoursesPage() {
         <h1 className="text-3xl text-foreground">Hello world!</h1>
 
         <div className="wrapper bg-card text-card-foreground rounded-xl p-4 shadow border border-border">
-          hello {account.user.fullName}
+          hello {account.fullName}
+          <form onSubmit={handleSubmit}>
+            <input
+              type="number"
+              name="accessLevelId"
+              placeholder="accessLevelId"
+            />
+            <input type="number" name="statusId" placeholder="statusId" />
+            <input
+              type="number"
+              name="difficultyId"
+              placeholder="difficultyId"
+            />
+            <input type="text" name="name" placeholder="name" />
+            <input type="text" name="notes" placeholder="notes" />
+
+            <button type="submit">envoyer</button>
+          </form>
         </div>
 
         <div className="w-full max-w-screen-xl mx-auto bg-card text-card-foreground border border-border rounded-xl py-4 px-4">
