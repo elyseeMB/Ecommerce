@@ -13,7 +13,7 @@ export default function LoginPage() {
     const form = new FormData(element);
     const doc = Object.fromEntries(form);
     register(doc);
-    navigate("/");
+    navigate("/organizations/create");
   };
 
   return (

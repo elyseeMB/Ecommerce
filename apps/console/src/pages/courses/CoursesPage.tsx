@@ -6,13 +6,18 @@ export default function CoursesPage() {
   const account = useAccount();
   const organization = useOrganization();
 
+
+  console.log(organization)
+
+  console.log('Bonjour les gens')
+
   useAsyncEffect(async () => {
     const data = await apiFetch("/courses");
   }, []);
 
   return (
     <>
-      <div>
+      <div className="max-w-screen-lg m-auto">
         <div className="bg-background text-foreground p-6 rounded-lg">
           <h2 className="text-xl font-bold text-primary">Hello</h2>
           <p className="text-muted-foreground">Ce texte est en muted</p>

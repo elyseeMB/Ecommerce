@@ -2,7 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="53315ae4-17cb-4db9-9fbe-2ecb295cb024" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/packages/ui/src/stories/organisms/NavigationMenu/NavigationMenu.module.css" beforeDir="false" afterPath="$PROJECT_DIR$/packages/ui/src/stories/organisms/NavigationMenu/NavigationMenu.module.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/console/src/layouts/MainLayout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/console/src/layouts/MainLayout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/console/src/pages/courses/CoursesPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/console/src/pages/courses/CoursesPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/base/5/16750" beforeDir="false" afterPath="$PROJECT_DIR$/data/base/5/16750" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/base/5/16761" beforeDir="false" afterPath="$PROJECT_DIR$/data/base/5/16761" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/base/5/16767" beforeDir="false" afterPath="$PROJECT_DIR$/data/base/5/16767" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/base/5/16768" beforeDir="false" afterPath="$PROJECT_DIR$/data/base/5/16768" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/base/5/16772" beforeDir="false" afterPath="$PROJECT_DIR$/data/base/5/16772" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/base/5/16774" beforeDir="false" afterPath="$PROJECT_DIR$/data/base/5/16774" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/base/5/16775" beforeDir="false" afterPath="$PROJECT_DIR$/data/base/5/16775" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/base/5/16779" beforeDir="false" afterPath="$PROJECT_DIR$/data/base/5/16779" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/global/pg_control" beforeDir="false" afterPath="$PROJECT_DIR$/data/global/pg_control" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/pg_wal/000000010000000000000001" beforeDir="false" afterPath="$PROJECT_DIR$/data/pg_wal/000000010000000000000001" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/pg_xact/0000" beforeDir="false" afterPath="$PROJECT_DIR$/data/pg_xact/0000" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/data/postmaster.pid" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/ui/src/stories/Button.stories.ts" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/ui/src/stories/Button.tsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/ui/src/stories/button.css" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/ui/src/stories/organisms/table/Table.stories.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/ui/src/stories/organisms/table/Table.stories.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/ui/src/stories/organisms/table/Table.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/ui/src/stories/organisms/table/Table.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -12,10 +30,10 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "customColor": "",
-  "associatedIndex": 0
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 0
+}</component>
   <component name="ProjectId" id="2yj8lfOaVoLZNPg1PmSmjhYGSnw" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
@@ -24,7 +42,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "main",
+    "git-widget-placeholder": "ref/tailwind",
     "nodejs_package_manager_path": "pnpm",
     "settings.editor.selected.configurable": "configurable.group.appearance",
     "vue.rearranger.settings.migration": "true"
@@ -46,6 +64,7 @@
       <option name="presentableId" value="Default" />
       <updated>1750336777379</updated>
       <workItem from="1750336780140" duration="9000" />
+      <workItem from="1751395398545" duration="9000" />
     </task>
     <servers />
   </component>

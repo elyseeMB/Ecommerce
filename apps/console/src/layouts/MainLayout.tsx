@@ -1,7 +1,7 @@
 import { useEffect, type PropsWithChildren } from "react";
 import { AuthStatus, useAuth } from "../hooks/useAuth.ts";
 import { UnAuthenticatedError } from "@helpers/website";
-import { useAccount } from "../store.tsx";
+import { useAccount, useOrganization } from "../store.tsx";
 import {
   ContainerMenu,
   Content,
@@ -16,6 +16,7 @@ import { Outlet } from "react-router";
 
 export function MainLayout({ children }: PropsWithChildren) {
   const account = useAccount();
+  const organization = useOrganization();
   const { status } = useAuth();
 
   useEffect(() => {
@@ -27,8 +28,10 @@ export function MainLayout({ children }: PropsWithChildren) {
   return (
     <div className="main">
       <Header>
+        {organization.name}
         <NavigationMenu>
           <ContainerMenu>
+            {account.user.fullName}
             <Item>
               <Trigger
                 title="Courses"
@@ -107,7 +110,7 @@ export function MainLayout({ children }: PropsWithChildren) {
           </ContainerMenu>
         </NavigationMenu>
       </Header>
-      <div className="container">{children ?? <Outlet />}</div>
+      <div className="container bg-slate-100">{children ?? <Outlet />}</div>
     </div>
   );
 }
