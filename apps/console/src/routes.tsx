@@ -81,6 +81,22 @@ const routes = [
         path: "courses",
         Component: lazy(() => import("./pages/courses/CoursesPage.tsx")),
       },
+      {
+        path: "access-levels",
+        Component: lazy(
+          () => import("./pages/access_levels/Access_levelsPage.tsx"),
+        ),
+      },
+      {
+        path: "difficulties",
+        Component: lazy(
+          () => import("./pages/difficulties/DifficultiesPage.tsx"),
+        ),
+      },
+      {
+        path: "statuses",
+        Component: lazy(() => import("./pages/statuses/StatusPage.tsx")),
+      },
     ],
   },
 ] satisfies AppRoutes[];

@@ -4,7 +4,7 @@ import { existsInOrganization } from './helpers/organizations.js'
 export const courseValidator = vine.compile(
   vine.object({
     accessLevelId: vine.number().exists(existsInOrganization('access_levels')),
-    difficultyId: vine.number().exists(existsInOrganization('difficulty')),
+    difficultyId: vine.number().exists(existsInOrganization('difficulties')),
     statusId: vine.number().exists(existsInOrganization('statuses')),
 
     name: vine.string().maxLength(150),
