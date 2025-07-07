@@ -26,33 +26,24 @@ import {
   useConfirm,
   useDialogRef,
 } from "@ui/website";
-import React, { useMemo, useState } from "react";
-import { useUpdateResources } from "../store.tsx";
-import { useDeleteAccessLevels } from "../hooks/access_levels/useAccessLevels.ts";
+import React, { useState } from "react";
+import { useResource, type ResourceMap } from "../store.tsx";
+import { useFetchDeleteResource } from "../hooks/access_levels/useAccessLevels.ts";
 
-interface AccessLevelWithId extends AccessLevels {
-  tempId: string;
-}
+type ResourseItem<T extends keyof ResourceMap> = ResourceMap[T];
 
-interface Props {
-  items: AccessLevels[];
-  onReorder: (newItems: AccessLevels[]) => void;
-}
+type Props<T extends keyof ResourceMap> = {
+  items: ResourseItem<T>[];
+  onReorder: (newItems: ResourseItem<T>[]) => void;
+  type: T;
+};
 
-export function SortableList({ items, onReorder }: Props) {
-  const itemsWithId: AccessLevelWithId[] = useMemo(
-    () =>
-      items.map((item, index) => ({
-        ...item,
-        tempId: `${item.name}-${item.color}-${index}`.replace(
-          /[^a-zA-Z0-9-_]/g,
-          "",
-        ),
-      })),
-    [items],
-  );
-
-  const [activeId, setActiveId] = useState<string | null>(null);
+export function SortableList<T extends keyof ResourceMap>({
+  items,
+  onReorder,
+  type,
+}: Props<T>) {
+  const [activeId, setActiveId] = useState<number | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -61,15 +52,15 @@ export function SortableList({ items, onReorder }: Props) {
     }),
   );
 
-  const activeItem = itemsWithId.find((i) => i.tempId === activeId) || null;
+  const activeItem = items.find((i) => i.id === activeId) || null;
 
   const handleDragEnd = ({ active, over }: any) => {
     setActiveId(null);
     if (active.id !== over?.id) {
-      const oldIndex = itemsWithId.findIndex((i) => i.tempId === active.id);
-      const newIndex = itemsWithId.findIndex((i) => i.tempId === over?.id);
-      const newItemsWithId = arrayMove(itemsWithId, oldIndex, newIndex);
-      onReorder(newItemsWithId.map(({ tempId, ...rest }) => rest));
+      const oldIndex = items.findIndex((i) => i.id === active.id);
+      const newIndex = items.findIndex((i) => i.id === over?.id);
+      const newItems = arrayMove(items, oldIndex, newIndex);
+      onReorder(newItems);
     }
   };
 
@@ -77,29 +68,35 @@ export function SortableList({ items, onReorder }: Props) {
     <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
-      onDragStart={(e) => setActiveId(e.active.id as string)}
+      onDragStart={(e) => setActiveId(e.active.id)}
       onDragEnd={handleDragEnd}
       onDragCancel={() => setActiveId(null)}
     >
       <SortableContext
-        items={itemsWithId.map((i) => i.tempId)}
+        items={items.map((i) => i.id!)}
         strategy={verticalListSortingStrategy}
       >
         <ul className="space-y-2">
-          {itemsWithId.map((item) => (
-            <SortableItem key={item.tempId} item={item} />
+          {items.map((item) => (
+            <SortableItem key={item.id} item={item} type={type} />
           ))}
         </ul>
       </SortableContext>
 
       <DragOverlay>
-        {activeItem && <Item item={activeItem} dragOverlay />}
+        {activeItem && <Item type={type} item={activeItem} dragOverlay />}
       </DragOverlay>
     </DndContext>
   );
 }
 
-function SortableItem({ item }: { item: AccessLevelWithId }) {
+function SortableItem<T extends keyof ResourceMap>({
+  item,
+  type,
+}: {
+  item: ResourseItem<T>;
+  type: T;
+}) {
   const {
     attributes,
     listeners,
@@ -107,7 +104,7 @@ function SortableItem({ item }: { item: AccessLevelWithId }) {
     transform,
     transition,
     isDragging,
-  } = useSortable({ id: item.tempId });
+  } = useSortable({ id: item.id! });
 
   const [hovered, setHovered] = useState(false);
 
@@ -125,6 +122,7 @@ function SortableItem({ item }: { item: AccessLevelWithId }) {
       onMouseLeave={() => setHovered(false)}
     >
       <Item
+        type={type}
         item={item}
         dragOverlay={isDragging}
         enableAction={hovered}
@@ -134,22 +132,23 @@ function SortableItem({ item }: { item: AccessLevelWithId }) {
   );
 }
 
-function Item({
+function Item<T extends keyof ResourceMap>({
   item,
+  type,
   dragOverlay,
   enableAction,
   dragHandleProps,
 }: {
-  item: AccessLevels;
+  type: T;
+  item: ResourseItem<T>;
   dragOverlay?: boolean;
   enableAction?: boolean;
   dragHandleProps?: React.HTMLAttributes<HTMLElement>;
 }) {
-  const updateResources = useUpdateResources();
+  const { update: updateResources } = useResource("accessLevel");
   const dialogRef = useDialogRef();
   const confirmDelete = useConfirm();
-
-  const [deletAccessLevels, isDeleting] = useDeleteAccessLevels(item.id);
+  const [deleteResource, isDeleting] = useFetchDeleteResource(type, item.id!);
 
   const [name, setName] = useState(item.name);
   const [color, setColor] = useState(item.color);
@@ -168,7 +167,7 @@ function Item({
       method: "PUT",
     })
       .then((d) => {
-        updateResources("accessLevel", d);
+        updateResources(d);
         dialogRef.current?.close();
       })
       .catch((err) => {
@@ -183,7 +182,7 @@ function Item({
     confirmDelete(
       () =>
         new Promise((resolve) => {
-          deletAccessLevels({
+          deleteResource({
             onCompletd: () => resolve(),
           });
         }),

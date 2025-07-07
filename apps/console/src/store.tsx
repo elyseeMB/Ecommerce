@@ -10,7 +10,7 @@ import { combine, persist } from "zustand/middleware";
 import type { Account } from "./hooks/useAuth.ts";
 import type { AccessLevels, Difficulties, Statuses } from "@api/website/types";
 
-type ResourceMap = {
+export type ResourceMap = {
   accessLevel: AccessLevels;
   difficulties: Difficulties;
   statuses: Statuses;
@@ -24,6 +24,21 @@ type State = {
   statuses: Statuses[];
 };
 
+function getStateKey<T extends keyof ResourceMap>(
+  type: T,
+): keyof Omit<State, "account" | "organization"> {
+  switch (type) {
+    case "accessLevel":
+      return "accesslevels";
+    case "difficulties":
+      return "difficulties";
+    case "statuses":
+      return "statuses";
+    default:
+      throw new Error("Unknown resource type " + type);
+  }
+}
+
 const createStore = () =>
   create(
     persist(
@@ -36,69 +51,45 @@ const createStore = () =>
           statuses: [],
         } as State,
         (set) => ({
-          getAccessLevels: (accesslevels: AccessLevels[]) =>
-            set({ accesslevels }),
-
-          updateAccessLevels: (newData: AccessLevels) => {
-            return set((state) => ({
-              accesslevels: [...state.accesslevels, newData],
-            }));
+          setResources: function <T extends keyof ResourceMap>(
+            type: T,
+            data: ResourceMap[T][],
+          ) {
+            const key = getStateKey(type);
+            return set({ [key]: data });
           },
 
-          udpateResources: function <T extends keyof ResourceMap>(
+          addResource: function <T extends keyof ResourceMap>(
             type: T,
             newData: ResourceMap[T],
           ) {
-            switch (type) {
-              case "accessLevel":
-                return set((state) => ({
-                  accesslevels: state.accesslevels.map((item) =>
-                    item.id === newData.id ? { ...item, ...newData } : item,
-                  ),
-                }));
-              case "difficulties":
-                return set((state) => ({
-                  difficulties: state.difficulties.map((item) =>
-                    item.id === newData.id ? { ...item, ...newData } : item,
-                  ),
-                }));
-              case "statuses":
-                return set((state) => ({
-                  statuses: state.statuses.map((item) =>
-                    item.id === newData.id ? { ...item, ...newData } : item,
-                  ),
-                }));
-            }
+            const key = getStateKey(type);
+            return set((state) => ({
+              [key]: [...state[key], newData],
+            }));
           },
 
-          deleteResources: function <T extends keyof ResourceMap>(
+          updateResource: function <T extends keyof ResourceMap>(
+            type: T,
+            newData: ResourceMap[T],
+          ) {
+            const key = getStateKey(type);
+            return set((state) => ({
+              [key]: state[key].map((item) =>
+                item.id === newData.id ? { ...item, ...newData } : item,
+              ),
+            }));
+          },
+
+          deleteResource: function <T extends keyof ResourceMap>(
             type: T,
             id: number,
           ) {
-            switch (type) {
-              case "accessLevel":
-                return set((state) => ({
-                  accesslevels: state.accesslevels.filter(
-                    (item) => item.id !== id,
-                  ),
-                }));
-              case "difficulties":
-                return set((state) => ({
-                  difficulties: state.difficulties.filter(
-                    (item) => item.id !== id,
-                  ),
-                }));
-              case "statuses":
-                return set((state) => ({
-                  statuses: state.statuses.filter((item) => item.id !== id),
-                }));
-            }
+            const key = getStateKey(type);
+            return set((state) => ({
+              [key]: state[key].filter((item) => item.id !== id),
+            }));
           },
-
-          getDifficulties: (difficulties: Difficulties[]) =>
-            set({ difficulties }),
-
-          getStatuses: (statuses: Statuses[]) => set({ statuses }),
 
           updateOrganization: (newDate: Record<string, any>) =>
             set({ organization: newDate }),
@@ -140,43 +131,41 @@ export function useStore<T>(selector: (state: StoreState) => T) {
   return useZustandStore(store, selector);
 }
 
+export type InferResourceType<T> = T extends keyof ResourceMap
+  ? ResourceMap[T]
+  : never;
+
+export function useResource<T extends keyof ResourceMap>(type: T) {
+  const key = getStateKey(type);
+  const list = useStore((state) => state[key]) as InferResourceType<T>[];
+
+  const setResources = useStore((state) => state.setResources);
+  const addResource = useStore((state) => state.addResource);
+  const updateResource = useStore((state) => state.updateResource);
+  const deleteResource = useStore((state) => state.deleteResource);
+
+  return {
+    list,
+    set: (data: InferResourceType<T>[]) => setResources(type, data),
+    add: (data: InferResourceType<T>) => addResource(type, data),
+    update: (data: InferResourceType<T>) => updateResource(type, data),
+    delete: (id: number) => deleteResource(type, id),
+  };
+}
+
 // ACCESS_LEVELS
-export function useGetAccessLevels() {
-  return useStore((state) => state.getAccessLevels);
-}
-
-export function useListAccessLevels() {
-  return useStore((state) => state.accesslevels);
-}
-
-export function useUpdateAccessLevels() {
-  return useStore((state) => state.updateAccessLevels);
-}
-
-export function useUpdateResources() {
-  return useStore((state) => state.udpateResources);
-}
-
-export function useDeleteResources() {
-  return useStore((state) => state.deleteResources);
+export function useAccessLevels() {
+  return useResource("accessLevel");
 }
 
 // DIFFICULTIES
-export function useGetDifficulties() {
-  return useStore((state) => state.getDifficulties);
-}
-
-export function useListDifficulties() {
-  return useStore((state) => state.difficulties);
+export function useDifficulties() {
+  return useResource("difficulties");
 }
 
 // STATUSES
-export function useGetStatuses() {
-  return useStore((state) => state.getStatuses);
-}
-
-export function useListStatuses() {
-  return useStore((state) => state.statuses);
+export function useStatuses() {
+  return useResource("statuses");
 }
 
 // ORGANISATION

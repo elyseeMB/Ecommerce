@@ -1,9 +1,5 @@
 import { apiFetch } from "@helpers/website";
-import {
-  useListAccessLevels,
-  useUpdateAccessLevels,
-  useGetAccessLevels,
-} from "../../store.tsx";
+import { useResource } from "../../store.tsx";
 import { useCallback, useEffect, useState, type FormEventHandler } from "react";
 import type { AccessLevels } from "@api/website/types";
 import {
@@ -17,15 +13,17 @@ import {
 import { SortableList } from "../../components/SortalbeResources.tsx";
 
 export default function AccessLevelsPage() {
-  const accessLevelsList = useListAccessLevels();
-  const updateAccessLevels = useUpdateAccessLevels();
-  const getAccessLevels = useGetAccessLevels();
+  const {
+    list: accessLevelsList,
+    set: setAccessLevels,
+    add: addAccessLevels,
+  } = useResource("accessLevel");
   const dialogRef = useDialogRef();
   const [loading, setLoading] = useState<boolean>(false);
 
   const fetchAccessLevels = useCallback(() => {
-    apiFetch<AccessLevels[]>("/access-levels").then(getAccessLevels);
-  }, [getAccessLevels]);
+    apiFetch<AccessLevels[]>("/access-levels").then(setAccessLevels);
+  }, [setAccessLevels]);
 
   useEffect(() => {
     if (accessLevelsList.length === 0) {
@@ -40,7 +38,7 @@ export default function AccessLevelsPage() {
     const data = Object.fromEntries(new FormData(form));
 
     apiFetch<AccessLevels>("/access-levels", { json: data })
-      .then(updateAccessLevels)
+      .then(addAccessLevels)
       .catch((err) => {
         console.error(err);
       })
@@ -57,10 +55,10 @@ export default function AccessLevelsPage() {
         json: { ids },
         method: "PUT",
       })
-        .then(getAccessLevels)
+        .then(setAccessLevels)
         .catch((err) => console.error(err));
     },
-    [getAccessLevels],
+    [setAccessLevels],
   );
 
   return (
@@ -117,6 +115,7 @@ export default function AccessLevelsPage() {
           </div>
 
           <SortableList
+            type="accessLevel"
             items={accessLevelsList}
             onReorder={(newItems) => {
               handleReorder(newItems);
