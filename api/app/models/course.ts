@@ -1,12 +1,13 @@
 import { DateTime } from 'luxon'
-import { BaseModel, belongsTo, column } from '@adonisjs/lucid/orm'
+import { BaseModel, belongsTo, column, hasMany, hasManyThrough } from '@adonisjs/lucid/orm'
 import { compose } from '@adonisjs/core/helpers'
 import { WithOrganization } from './mixins/with_organization.js'
 import Difficulty from './difficulty.js'
-import type { BelongsTo } from '@adonisjs/lucid/types/relations'
-import Module from 'module'
+import type { BelongsTo, HasMany, HasManyThrough } from '@adonisjs/lucid/types/relations'
 import Status from './status.js'
 import AccessLevel from './access_level.js'
+import Module from './module.js'
+import Lesson from './lesson.js'
 
 export default class Course extends compose(BaseModel, WithOrganization) {
   serializeExtras = true
@@ -46,4 +47,10 @@ export default class Course extends compose(BaseModel, WithOrganization) {
 
   @belongsTo(() => Status)
   declare status: BelongsTo<typeof Status>
+
+  @hasMany(() => Module)
+  declare modules: HasMany<typeof Module>
+
+  @hasManyThrough([() => Lesson, () => Module])
+  declare lessons: HasManyThrough<typeof Lesson>
 }

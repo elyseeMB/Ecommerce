@@ -1,18 +1,9 @@
 import { useEffect, type PropsWithChildren } from "react";
-import { AuthStatus, useAuth } from "../hooks/useAuth.ts";
-import { UnAuthenticatedError } from "@helpers/website";
+import { AuthStatus, useAuth, type Account } from "../hooks/useAuth.ts";
+import { UnAuthenticatedError, apiFetch } from "@helpers/website";
 import { useAccount, useOrganization } from "../store.tsx";
-import {
-  ContainerMenu,
-  Content,
-  Header,
-  Item,
-  ListItem,
-  NavigationMenu,
-  Trigger,
-} from "@ui/website";
-import { Icon } from "@ui/website/src/stories/atoms/icon/Icon.tsx";
-import { Outlet } from "react-router";
+import { ConfirmDialog, Header, IconSymbols, ItemHeader } from "@ui/website";
+import { Link, Outlet } from "react-router";
 
 export function MainLayout({ children }: PropsWithChildren) {
   const account = useAccount();
@@ -25,92 +16,52 @@ export function MainLayout({ children }: PropsWithChildren) {
     }
   }, []);
 
+  useEffect(() => {
+    const info = apiFetch<Account>("/me");
+  }, []);
+
   return (
     <div className="main">
-      <Header>
-        {organization.name}
-        <NavigationMenu>
-          <ContainerMenu>
-            {account.fullName}
-            <Item>
-              <Trigger
-                title="Courses"
-                icon={<Icon name="ArrowDropDownLine" aria-hidden />}
-              />
-              <Content>
-                <ListItem href="https://stitches.dev/" title="Stitches">
-                  CSS-in-JS with best-in-class developer experience.
-                </ListItem>
-                <ListItem href="/colors" title="Colors">
-                  Beautiful, thought-out palettes with auto dark mode.
-                </ListItem>
-                <ListItem href="https://icons.radix-ui.com/" title="Icons">
-                  A crisp set of 15x15 icons, balanced and consistent.
-                </ListItem>
-                <hr />
-                <ListItem href="https://icons.radix-ui.com/" title="Icons">
-                  A crisp set of 15x15 icons, balanced and consistent.
-                </ListItem>
-              </Content>
-            </Item>
-
-            <Item>
-              <Trigger
-                title="Difficulties"
-                icon={<Icon name="HomeLine" aria-hidden />}
-              />
-              <Content>
-                <ListItem href="https://stitches.dev/" title="Stitches">
-                  CSS-in-JS with best-in-class developer experience.
-                </ListItem>
-                <ListItem href="/colors" title="Colors">
-                  Beautiful, thought-out palettes with auto dark mode.
-                </ListItem>
-                <ListItem href="https://icons.radix-ui.com/" title="Icons">
-                  A crisp set of 15x15 icons, balanced and consistent.
-                </ListItem>
-              </Content>
-            </Item>
-
-            <Item>
-              <Trigger
-                title="Statuses"
-                icon={<Icon name="CommandLine" aria-hidden />}
-              />
-              <Content>
-                <ListItem href="https://stitches.dev/" title="Stitches">
-                  CSS-in-JS with best-in-class developer experience.
-                </ListItem>
-                <ListItem href="/colors" title="Colors">
-                  Beautiful, thought-out palettes with auto dark mode.
-                </ListItem>
-                <ListItem href="https://icons.radix-ui.com/" title="Icons">
-                  A crisp set of 15x15 icons, balanced and consistent.
-                </ListItem>
-              </Content>
-            </Item>
-
-            <Item>
-              <Trigger
-                title="Access levels"
-                icon={<Icon name="ExpandUpDownLine" aria-hidden />}
-              />
-              <Content>
-                <ListItem href="https://stitches.dev/" title="Stitches">
-                  CSS-in-JS with best-in-class developer experience.
-                </ListItem>
-                <ListItem href="/colors" title="Colors">
-                  Beautiful, thought-out palettes with auto dark mode.
-                </ListItem>
-                <ListItem href="https://icons.radix-ui.com/" title="Icons">
-                  A crisp set of 15x15 icons, balanced and consistent.
-                </ListItem>
-              </Content>
-            </Item>
-          </ContainerMenu>
-        </NavigationMenu>
+      <Header user={{ name: account.fullName }}>
+        <div className="flex items-center justify-center gap-3">
+          <span
+            className="w-2px h-15px rounded bg-black/20 block
+           indent-3000 origin-center transform rotate-20deg"
+          >
+            arrow
+          </span>
+          {organization.name}
+          <span
+            className="w-2px h-15px rounded bg-black/20 block
+           indent-3000 origin-center transform rotate-20deg"
+          >
+            arrow
+          </span>
+        </div>
+        <div className="flex-1 flex items-center justify-center gap-5">
+          <ItemHeader>
+            <Link to="/courses">Courses</Link>
+          </ItemHeader>
+          <ItemHeader>
+            <Link to="/access-levels">Access-Levels</Link>
+          </ItemHeader>
+          <ItemHeader>
+            <Link to="/difficulties">Difficulties</Link>
+          </ItemHeader>
+          <ItemHeader>
+            <Link to="/statuses">Statuses</Link>
+          </ItemHeader>
+        </div>
       </Header>
-      <div className="container bg-slate-100">{children ?? <Outlet />}</div>
+      <div className="container bg-slate-100 h-screen">
+        {children ?? (
+          <>
+            <Outlet />
+            <IconSymbols />
+            <ConfirmDialog />
+          </>
+        )}
+      </div>
     </div>
   );
 }

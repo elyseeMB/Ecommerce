@@ -19,11 +19,13 @@ type BaseProps<
   placeholder?: string;
   message?: boolean;
   children?: ReactNode;
+  value?: string;
 } & P;
 
 type Props =
   | BaseProps<never, ComponentProps<typeof Input>>
   | BaseProps<"text", ComponentProps<typeof Input>>
+  | BaseProps<"color", ComponentProps<typeof Input>>
   | BaseProps<"email", ComponentProps<typeof Input>>
   | BaseProps<"password", ComponentProps<typeof Input>>
   | BaseProps<"textarea", ComponentProps<typeof Textarea>>
@@ -49,6 +51,7 @@ function getInput(props: Props) {
     name: props.name,
     id: props.id,
     placeholder: props.placeholder,
+    value: props.value,
   };
 
   switch (type) {

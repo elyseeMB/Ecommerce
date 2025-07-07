@@ -27,6 +27,9 @@
   transform: translate(-50%, -50%);
   width: 90vw;
   max-width: 500px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
   max-height: 85vh;
   padding: 25px;
   animation: contentShow 150ms cubic-bezier(0.16, 1, 0.3, 1);
@@ -55,11 +58,10 @@
   align-items: center;
   justify-content: center;
   border-radius: 4px;
-  padding: 0 15px;
+  padding: 2px;
   font-size: 15px;
   line-height: 1;
   font-weight: 500;
-  height: 35px;
   user-select: none;
   &:focus:not(:focus-visible) {
     outline: 0;

@@ -3,9 +3,16 @@
   justify-content: space-between;
   align-items: center;
   padding-inline: 2rem;
+  padding-block: 0.8rem;
   background: white;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
   font-family: "Nunito Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+.header .header__link {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
 }
 
 .header svg {

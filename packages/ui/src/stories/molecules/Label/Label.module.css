@@ -8,3 +8,8 @@
 .Input {
   width: 100%;
 }
+
+.Input input[type="color"] {
+  width: 100%;
+  background: red;
+}

@@ -20,5 +20,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
-  args: {},
+  args: {
+    trigger: <div>Edit profile</div>,
+    title: "hello world",
+  },
 };

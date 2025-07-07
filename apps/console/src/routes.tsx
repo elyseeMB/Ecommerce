@@ -1,8 +1,4 @@
-import React, {
-  Suspense,
-  type PropsWithChildren,
-  type ReactElement,
-} from "react";
+import React, { Suspense, type ReactElement } from "react";
 import {
   Navigate,
   Outlet,
@@ -18,7 +14,6 @@ import {
   CenteredLayout,
   CenteredLayoutSkeleton,
 } from "@ui/website";
-import { Room } from "./pages/Room.tsx";
 import { MainLayout } from "./layouts/MainLayout.tsx";
 
 function ErrorBoundary() {

@@ -30,7 +30,7 @@ export default class Lesson extends compose(BaseModel, WithOrganization) {
   declare order: number
 
   @column.dateTime()
-  declare publish_at: DateTime | null
+  declare publishAt: DateTime | null
 
   @column.dateTime({ autoCreate: true })
   declare createdAt: DateTime

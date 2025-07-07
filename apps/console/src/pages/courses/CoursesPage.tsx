@@ -1,7 +1,7 @@
 import { apiFetch } from "@helpers/website";
 import { useAsyncEffect } from "../../hooks/useAsyncEffect.tsx";
 import { useAccount, useOrganization } from "../../store.tsx";
-import type { FormEvent, FormEventHandler } from "react";
+import type { FormEventHandler } from "react";
 
 export default function CoursesPage() {
   const account = useAccount();
@@ -9,19 +9,36 @@ export default function CoursesPage() {
 
   console.log(organization);
 
-  console.log("Bonjour les gens");
-
   useAsyncEffect(async () => {
     const data = await apiFetch("/courses");
+    console.log(data);
   }, []);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     const element = e.currentTarget;
     const form = new FormData(element);
-
     const res = apiFetch("/courses", { json: Object.fromEntries(form) });
+    console.log(res);
+  };
 
+  const handleSubmitModules: FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+    const element = e.currentTarget;
+    const form = new FormData(element);
+    const res = apiFetch(`/courses/${1}/modules`, {
+      json: Object.fromEntries(form),
+    });
+    console.log(res);
+  };
+
+  const handleSubmitLessons: FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+    const element = e.currentTarget;
+    const form = new FormData(element);
+    const res = apiFetch(`/lessons`, {
+      json: Object.fromEntries(form),
+    });
     console.log(res);
   };
 
@@ -36,7 +53,7 @@ export default function CoursesPage() {
           </button>
         </div>
 
-        <h1 className="text-3xl text-foreground">Hello world!</h1>
+        <h1 className="text-3xl text-foreground">Courses</h1>
 
         <div className="wrapper bg-card text-card-foreground rounded-xl p-4 shadow border border-border">
           hello {account.fullName}
@@ -54,6 +71,35 @@ export default function CoursesPage() {
             />
             <input type="text" name="name" placeholder="name" />
             <input type="text" name="notes" placeholder="notes" />
+
+            <button type="submit">envoyer</button>
+          </form>
+        </div>
+
+        <div className="wrapper bg-card text-card-foreground rounded-xl p-4 shadow border border-border">
+          <h1>Modules</h1>
+          <form onSubmit={handleSubmitModules}>
+            <input type="text" name="name" placeholder="module name" />
+            <input type="number" name="statusId" placeholder="statusId" />
+
+            <button type="submit">envoyer</button>
+          </form>
+        </div>
+
+        <div className="wrapper bg-card text-card-foreground rounded-xl p-4 shadow border border-border">
+          <h1>Lessons</h1>
+          <form onSubmit={handleSubmitLessons}>
+            <input type="text" name="name" placeholder="lessons name" />
+
+            <input type="number" name="moduleId" placeholder="moduleId" />
+
+            <input
+              type="number"
+              name="accessLevelId"
+              placeholder="accessLevelId"
+            />
+
+            <input type="number" name="statusId" placeholder="statusId" />
 
             <button type="submit">envoyer</button>
           </form>

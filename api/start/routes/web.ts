@@ -10,9 +10,11 @@
 const SessionController = () => import('#controllers/session_controller')
 const OrganizationsController = () => import('#controllers/organizations_controller')
 const CoursesController = () => import('#controllers/courses_controller')
-import AccessLevelsController from '#controllers/access_levels_controller'
-import DifficultiesController from '#controllers/difficulties_controller'
-import StatusesController from '#controllers/statuses_controller'
+const AccessLevelsController = () => import('#controllers/access_levels_controller')
+const DifficultiesController = () => import('#controllers/difficulties_controller')
+const LessonsController = () => import('#controllers/lessons_controller')
+const ModulesController = () => import('#controllers/modules_controller')
+const StatusesController = () => import('#controllers/statuses_controller')
 import { middleware } from '#start/kernel'
 import router from '@adonisjs/core/services/router'
 
@@ -41,9 +43,20 @@ router
     /* ACCESS_LEVELS */
     router.get('/access-levels', [AccessLevelsController, 'index']).as('access-levels.index')
     router.post('/access-levels', [AccessLevelsController, 'store']).as('access-levels.store')
+    router.put('/access-levels/order', [AccessLevelsController, 'order']).as('access-levels.order')
+    router.put('/access-levels/:id', [AccessLevelsController, 'update']).as('access-levels.update')
+    router
+      .delete('/access-levels/:id', [AccessLevelsController, 'destroy'])
+      .as('access-levels.destroy')
 
     /* COURSES */
     router.get('/courses', [CoursesController, 'index']).as('course.index')
     router.post('/courses', [CoursesController, 'store']).as('courses.store')
+
+    /* MODULES */
+    router.post('/courses/:courseId/modules', [ModulesController, 'store']).as('modules.stores')
+
+    /* LESSONS */
+    router.post('/lessons', [LessonsController, 'store']).as('lessons.store')
   })
   .use([middleware.auth({ guards: ['web'] }), middleware.organization()])

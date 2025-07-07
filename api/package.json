@@ -4,6 +4,9 @@
   "private": true,
   "type": "module",
   "license": "UNLICENSED",
+  "exports": {
+    "./types": "./types/types.ts"
+  },
   "scripts": {
     "start": "node bin/server.js",
     "build": "node ace build",

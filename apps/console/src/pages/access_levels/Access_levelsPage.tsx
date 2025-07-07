@@ -1,119 +1,127 @@
 import { apiFetch } from "@helpers/website";
-import { useAccount, useOrganization } from "../../store.tsx";
-import { useAsyncEffect } from "../../hooks/useAsyncEffect.tsx";
-import type { FormEventHandler } from "react";
+import {
+  useListAccessLevels,
+  useUpdateAccessLevels,
+  useGetAccessLevels,
+} from "../../store.tsx";
+import { useCallback, useEffect, useState, type FormEventHandler } from "react";
+import type { AccessLevels } from "@api/website/types";
+import {
+  Button,
+  Dialog,
+  DialogDescription,
+  Icon,
+  Label,
+  useDialogRef,
+} from "@ui/website";
+import { SortableList } from "../../components/SortalbeResources.tsx";
 
 export default function AccessLevelsPage() {
-  const account = useAccount();
-  const organization = useOrganization();
+  const accessLevelsList = useListAccessLevels();
+  const updateAccessLevels = useUpdateAccessLevels();
+  const getAccessLevels = useGetAccessLevels();
+  const dialogRef = useDialogRef();
+  const [loading, setLoading] = useState<boolean>(false);
 
-  console.log(organization);
+  const fetchAccessLevels = useCallback(() => {
+    apiFetch<AccessLevels[]>("/access-levels").then(getAccessLevels);
+  }, [getAccessLevels]);
 
-  useAsyncEffect(async () => {
-    const data = await apiFetch("/access-levels");
-    console.log(data);
-  }, []);
+  useEffect(() => {
+    if (accessLevelsList.length === 0) {
+      fetchAccessLevels();
+    }
+  }, [accessLevelsList]);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
+    setLoading(true);
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form));
-    const response = await apiFetch("/access-levels", { json: data });
 
-    console.log(response);
+    apiFetch<AccessLevels>("/access-levels", { json: data })
+      .then(updateAccessLevels)
+      .catch((err) => {
+        console.error(err);
+      })
+      .finally(() => {
+        dialogRef.current?.close();
+        setLoading(false);
+      });
   };
 
+  const handleReorder = useCallback(
+    (newItems: AccessLevels[]) => {
+      const ids = newItems.map((item) => item.id);
+      apiFetch<AccessLevels[]>("/access-levels/order", {
+        json: { ids },
+        method: "PUT",
+      })
+        .then(getAccessLevels)
+        .catch((err) => console.error(err));
+    },
+    [getAccessLevels],
+  );
+
   return (
-    <div>
-      <div className="max-w-screen-lg m-auto">
-        <div className="bg-background text-foreground p-6 rounded-lg">
-          <h2 className="text-xl font-bold text-primary">Access Levels</h2>
-          <p className="text-muted-foreground">Ce texte est en muted</p>
-          <button className="bg-destructive text-destructive-foreground px-4 py-2 rounded-md">
-            Supprimer
-          </button>
-        </div>
+    <div className="max-w-screen-sm m-auto">
+      <div className="py-3rem">
+        <div className="bg-card text-card-foreground rounded-xl p-4 shadow-opacity-50 border border-border">
+          <div className="flex justify-between mb-4">
+            <h2 className="text-xl font-bold text-primary">Access Levels</h2>
+            <Dialog
+              title="Add Access Level"
+              ref={dialogRef}
+              trigger={
+                <span className="flex items-center gap-2 transition rounded-lg hover:underline cursor-pointer">
+                  <Icon name="Add" size={14} />
+                  Add Access Level
+                </span>
+              }
+            >
+              <DialogDescription>
+                Add a new access level to your organization.
+              </DialogDescription>
 
-        <h1 className="text-3xl text-foreground">Hello world!</h1>
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <fieldset>
+                  <Label
+                    name="name"
+                    label="Name Access Level"
+                    placeholder="Name"
+                  />
+                </fieldset>
 
-        <div className="wrapper bg-card text-card-foreground rounded-xl p-4 shadow border border-border">
-          hello {account.fullName}
-          <form onSubmit={handleSubmit}>
-            <input type="text" name="name" placeholder="name" />
-            <input type="string" name="color" placeholder="color" />
-            <button type="submit">envoyer</button>
-          </form>
-        </div>
+                <fieldset>
+                  <Label
+                    type="color"
+                    name="color"
+                    label="Color Access Levels"
+                    placeholder="Color"
+                  />
+                </fieldset>
 
-        <div className="w-full max-w-screen-xl mx-auto bg-card text-card-foreground border border-border rounded-xl py-4 px-4">
-          <table className="w-full text-sm text-left border-collapse">
-            <thead>
-              <tr className="border-b border-border">
-                <th className="py-2 px-4 font-semibold text-foreground">
-                  Name
-                </th>
-                <th className="py-2 px-4 font-semibold text-foreground">
-                  Status
-                </th>
-                <th className="py-2 px-4 font-semibold text-foreground">
-                  Difficulty
-                </th>
-                <th className="py-2 px-4 font-semibold text-foreground">
-                  Access
-                </th>
-                <th className="py-2 px-4"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="border-b border-border hover:bg-muted">
-                <td className="py-2 px-4 text-primary hover:underline cursor-pointer">
-                  JavaScript Basics
-                </td>
-                <td className="py-2 px-4 text-foreground">Published</td>
-                <td className="py-2 px-4 text-foreground">Beginner</td>
-                <td className="py-2 px-4 text-foreground">Public</td>
-                <td className="py-2 px-4 text-right">
-                  <button className="text-muted-foreground hover:text-foreground">
-                    ⋮
-                  </button>
-                </td>
-              </tr>
-              <tr className="border-b border-border hover:bg-muted">
-                <td className="py-2 px-4 text-primary hover:underline cursor-pointer">
-                  Advanced CSS Grid
-                </td>
-                <td className="py-2 px-4 text-foreground">Draft</td>
-                <td className="py-2 px-4 text-foreground">Advanced</td>
-                <td className="py-2 px-4 text-foreground">Private</td>
-                <td className="py-2 px-4 text-right">
-                  <button className="text-muted-foreground hover:text-foreground">
-                    ⋮
-                  </button>
-                </td>
-              </tr>
-              <tr className="border-b border-border hover:bg-muted">
-                <td className="py-2 px-4 text-primary hover:underline cursor-pointer">
-                  React for Designers
-                </td>
-                <td className="py-2 px-4 text-foreground">Scheduled</td>
-                <td className="py-2 px-4 text-foreground">Intermediate</td>
-                <td className="py-2 px-4 text-foreground">Restricted</td>
-                <td className="py-2 px-4 text-right">
-                  <button className="text-muted-foreground hover:text-foreground">
-                    ⋮
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td
-                  colSpan={5}
-                  className="py-6 text-center text-muted-foreground"
+                <div
+                  style={{
+                    display: "flex",
+                    marginTop: 25,
+                    justifyContent: "flex-end",
+                  }}
                 >
-                  Loading more courses...
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  <Button disabled={loading} variant="primary" type="submit">
+                    {loading ? "Saving..." : "Save Changes"}
+                  </Button>
+                </div>
+              </form>
+            </Dialog>
+          </div>
+
+          <SortableList
+            items={accessLevelsList}
+            onReorder={(newItems) => {
+              handleReorder(newItems);
+            }}
+          />
         </div>
       </div>
     </div>
