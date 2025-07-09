@@ -35,6 +35,9 @@ router
     /* STATUSES */
     router.get('/statuses', [StatusesController, 'index']).as('statuses.index')
     router.post('/statuses', [StatusesController, 'store']).as('statuses.store')
+    router.put('/statuses/order', [StatusesController, 'order']).as('statuses.order')
+    router.put('/statuses/:id', [StatusesController, 'update']).as('statuses.update')
+    router.delete('statuses/:id', [StatusesController, 'destroy']).as('statuses.destroy')
 
     /* DIFFICULTIES */
     router.get('/difficulties', [DifficultiesController, 'index']).as('difficulties.index')

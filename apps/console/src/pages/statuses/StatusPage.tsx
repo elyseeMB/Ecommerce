@@ -1,118 +1,124 @@
 import { apiFetch } from "@helpers/website";
 import { useAsyncEffect } from "../../hooks/useAsyncEffect.tsx";
-import type { FormEventHandler } from "react";
-import { useAccount, useOrganization } from "../../store.tsx";
+import { useCallback, useEffect, type FormEventHandler } from "react";
+import { useAccount, useOrganization, useResource } from "../../store.tsx";
+import { SortableList } from "../../components/SortalbeResources.tsx";
+import {
+  Button,
+  Dialog,
+  DialogDescription,
+  Icon,
+  Label,
+  useDialogRef,
+} from "@ui/website";
+import type { Statuses } from "@api/website/types";
+import { useFetchResource } from "../../hooks/resource/useFetchResource.ts";
 
 export default function StatusesPage() {
-  const account = useAccount();
-  const organization = useOrganization();
+  const {
+    list: statusesList,
+    set: setStatuses,
+    add: addStatuses,
+  } = useResource("statuses");
+  const [handle, isLoading] = useFetchResource("statuses");
+  const dialogRef = useDialogRef();
 
-  console.log(organization);
+  const fetchDifficulties = useCallback(() => {
+    handle({
+      method: "GET",
+      onCompleted: setStatuses,
+    });
+  }, [setStatuses]);
 
-  useAsyncEffect(async () => {
-    const data = await apiFetch("/statuses");
-    console.log(data);
-  }, []);
+  useEffect(() => {
+    if (statusesList.length === 0) {
+      fetchDifficulties();
+    }
+  }, [statusesList]);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form));
-    const response = await apiFetch("/statuses", { json: data });
 
-    console.log(response);
+    handle({
+      method: "POST",
+      data: data,
+      onCompleted: addStatuses,
+    })
+      .catch((err) => console.error(err))
+      .finally(() => {
+        dialogRef.current?.close();
+      });
   };
+
+  const handleReorder = useCallback(
+    (newItems: Statuses[]) => {
+      const ids = newItems.map((item) => item.id);
+      handle({
+        method: "ORDER",
+        data: { ids },
+        onCompleted: setStatuses,
+      }).catch((err) => console.error(err));
+    },
+    [setStatuses],
+  );
   return (
-    <div>
-      <div className="max-w-screen-lg m-auto">
-        <div className="bg-background text-foreground p-6 rounded-lg">
-          <h2 className="text-xl font-bold text-primary">Statues</h2>
-          <p className="text-muted-foreground">Ce texte est en muted</p>
-          <button className="bg-destructive text-destructive-foreground px-4 py-2 rounded-md">
-            Supprimer
-          </button>
-        </div>
+    <div className="max-w-screen-sm m-auto">
+      <div className="py-3rem">
+        <div className="bg-card text-card-foreground rounded-xl p-4 shadow-opacity-50 border border-border">
+          <div className="flex justify-between mb-4">
+            <h2 className="text-xl font-bold text-primary">Statuses</h2>
+            <Dialog
+              title="Add Status"
+              ref={dialogRef}
+              trigger={
+                <span className="flex items-center gap-2 transition rounded-lg hover:underline cursor-pointer">
+                  <Icon name="Add" size={14} />
+                  Add Status
+                </span>
+              }
+            >
+              <DialogDescription>
+                Add a new Status to your organization.
+              </DialogDescription>
 
-        <h1 className="text-3xl text-foreground">Hello world!</h1>
+              <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                <fieldset>
+                  <Label name="name" label="Name Status" placeholder="Name" />
+                </fieldset>
 
-        <div className="wrapper bg-card text-card-foreground rounded-xl p-4 shadow border border-border">
-          hello {account.fullName}
-          <form onSubmit={handleSubmit}>
-            <input type="text" name="name" placeholder="name" />
-            <input type="string" name="color" placeholder="color" />
-            <button type="submit">envoyer</button>
-          </form>
-        </div>
+                <fieldset>
+                  <Label
+                    type="color"
+                    name="color"
+                    label="Color Status"
+                    placeholder="Color"
+                  />
+                </fieldset>
 
-        <div className="w-full max-w-screen-xl mx-auto bg-card text-card-foreground border border-border rounded-xl py-4 px-4">
-          <table className="w-full text-sm text-left border-collapse">
-            <thead>
-              <tr className="border-b border-border">
-                <th className="py-2 px-4 font-semibold text-foreground">
-                  Name
-                </th>
-                <th className="py-2 px-4 font-semibold text-foreground">
-                  Status
-                </th>
-                <th className="py-2 px-4 font-semibold text-foreground">
-                  Difficulty
-                </th>
-                <th className="py-2 px-4 font-semibold text-foreground">
-                  Access
-                </th>
-                <th className="py-2 px-4"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="border-b border-border hover:bg-muted">
-                <td className="py-2 px-4 text-primary hover:underline cursor-pointer">
-                  JavaScript Basics
-                </td>
-                <td className="py-2 px-4 text-foreground">Published</td>
-                <td className="py-2 px-4 text-foreground">Beginner</td>
-                <td className="py-2 px-4 text-foreground">Public</td>
-                <td className="py-2 px-4 text-right">
-                  <button className="text-muted-foreground hover:text-foreground">
-                    ⋮
-                  </button>
-                </td>
-              </tr>
-              <tr className="border-b border-border hover:bg-muted">
-                <td className="py-2 px-4 text-primary hover:underline cursor-pointer">
-                  Advanced CSS Grid
-                </td>
-                <td className="py-2 px-4 text-foreground">Draft</td>
-                <td className="py-2 px-4 text-foreground">Advanced</td>
-                <td className="py-2 px-4 text-foreground">Private</td>
-                <td className="py-2 px-4 text-right">
-                  <button className="text-muted-foreground hover:text-foreground">
-                    ⋮
-                  </button>
-                </td>
-              </tr>
-              <tr className="border-b border-border hover:bg-muted">
-                <td className="py-2 px-4 text-primary hover:underline cursor-pointer">
-                  React for Designers
-                </td>
-                <td className="py-2 px-4 text-foreground">Scheduled</td>
-                <td className="py-2 px-4 text-foreground">Intermediate</td>
-                <td className="py-2 px-4 text-foreground">Restricted</td>
-                <td className="py-2 px-4 text-right">
-                  <button className="text-muted-foreground hover:text-foreground">
-                    ⋮
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td
-                  colSpan={5}
-                  className="py-6 text-center text-muted-foreground"
+                <div
+                  style={{
+                    display: "flex",
+                    marginTop: 25,
+                    justifyContent: "flex-end",
+                  }}
                 >
-                  Loading more courses...
-                </td>
-              </tr>
-            </tbody>
-          </table>
+                  <Button disabled={isLoading} variant="primary" type="submit">
+                    {isLoading ? "Saving..." : "Save Changes"}
+                  </Button>
+                </div>
+              </form>
+            </Dialog>
+          </div>
+
+          <SortableList
+            type="statuses"
+            items={statusesList}
+            onReorder={(newItems) => {
+              handleReorder(newItems);
+            }}
+          />
         </div>
       </div>
     </div>
