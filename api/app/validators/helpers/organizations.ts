@@ -1,6 +1,10 @@
 import { Database } from '@adonisjs/lucid/database'
 import { FieldContext } from '@vinejs/vine/types'
 
+export type OrganizationMetaData = {
+  organizationId: number
+}
+
 export function withOrganizationMetaData(id: number) {
   return {
     meta: {

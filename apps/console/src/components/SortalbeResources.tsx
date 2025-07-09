@@ -1,4 +1,3 @@
-import type { AccessLevels } from "@api/website/types";
 import {
   DndContext,
   closestCenter,
@@ -16,7 +15,6 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { apiFetch } from "@helpers/website";
 import {
   Button,
   Dialog,
@@ -28,7 +26,7 @@ import {
 } from "@ui/website";
 import React, { useState } from "react";
 import { useResource, type ResourceMap } from "../store.tsx";
-import { useFetchDeleteResource } from "../hooks/access_levels/useAccessLevels.ts";
+import { useFetchResource } from "../hooks/resource/useFetchResource.ts";
 
 type ResourseItem<T extends keyof ResourceMap> = ResourceMap[T];
 
@@ -145,45 +143,42 @@ function Item<T extends keyof ResourceMap>({
   enableAction?: boolean;
   dragHandleProps?: React.HTMLAttributes<HTMLElement>;
 }) {
-  const { update: updateResources } = useResource("accessLevel");
+  const [handle, isLoading] = useFetchResource(type);
+  const { update: updateResources, delete: deleteResource } = useResource(type);
   const dialogRef = useDialogRef();
   const confirmDelete = useConfirm();
-  const [deleteResource, isDeleting] = useFetchDeleteResource(type, item.id!);
-
   const [name, setName] = useState(item.name);
   const [color, setColor] = useState(item.color);
-  const [loading, setLoading] = useState<boolean>(false);
 
   const handleSubmit: React.FormEventHandler<HTMLFormElement> = (ev) => {
     ev.preventDefault();
     ev.stopPropagation();
-
-    if ((item.name === name && item.color === color) || !item.name.trim()) {
-      return;
-    }
-    setLoading(true);
-    apiFetch<AccessLevels>(`/access-levels/${item.id}`, {
-      json: { name, color },
+    handle({
+      id: item.id!,
+      data: { name, color },
       method: "PUT",
-    })
-      .then((d) => {
-        updateResources(d);
+      onCompleted: (data) => {
+        updateResources(data);
         dialogRef.current?.close();
-      })
-      .catch((err) => {
-        console.error("Erreur:", err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+      },
+    }).catch((err) => {
+      console.error(err);
+    });
   };
 
   const handleDelete = () => {
     confirmDelete(
       () =>
         new Promise((resolve) => {
-          deleteResource({
-            onCompletd: () => resolve(),
+          handle({
+            id: item.id!,
+            method: "DELETE",
+            onCompleted: (id) => {
+              deleteResource(id!);
+              resolve();
+            },
+          }).catch((err) => {
+            console.error(err);
           });
         }),
       {
@@ -256,8 +251,8 @@ function Item<T extends keyof ResourceMap>({
                     justifyContent: "flex-end",
                   }}
                 >
-                  <Button disabled={loading} variant="primary" type="submit">
-                    {loading ? "Update..." : "Save Changes"}
+                  <Button disabled={isLoading} variant="primary" type="submit">
+                    {isLoading ? "Update..." : "Save Changes"}
                   </Button>
                 </div>
               </form>

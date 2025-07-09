@@ -1,6 +1,5 @@
-import { apiFetch } from "@helpers/website";
 import { useResource } from "../../store.tsx";
-import { useCallback, useEffect, useState, type FormEventHandler } from "react";
+import { useCallback, useEffect, type FormEventHandler } from "react";
 import type { AccessLevels } from "@api/website/types";
 import {
   Button,
@@ -11,6 +10,7 @@ import {
   useDialogRef,
 } from "@ui/website";
 import { SortableList } from "../../components/SortalbeResources.tsx";
+import { useFetchResource } from "../../hooks/resource/useFetchResource.ts";
 
 export default function AccessLevelsPage() {
   const {
@@ -18,45 +18,46 @@ export default function AccessLevelsPage() {
     set: setAccessLevels,
     add: addAccessLevels,
   } = useResource("accessLevel");
+  const [handle, isLoading] = useFetchResource("accessLevel");
   const dialogRef = useDialogRef();
-  const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchAccessLevels = useCallback(() => {
-    apiFetch<AccessLevels[]>("/access-levels").then(setAccessLevels);
+  const fetchDifficulties = useCallback(() => {
+    handle({
+      method: "GET",
+      onCompleted: setAccessLevels,
+    });
   }, [setAccessLevels]);
 
   useEffect(() => {
     if (accessLevelsList.length === 0) {
-      fetchAccessLevels();
+      fetchDifficulties();
     }
   }, [accessLevelsList]);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
-    setLoading(true);
     const form = e.currentTarget;
     const data = Object.fromEntries(new FormData(form));
 
-    apiFetch<AccessLevels>("/access-levels", { json: data })
-      .then(addAccessLevels)
-      .catch((err) => {
-        console.error(err);
-      })
+    handle({
+      method: "POST",
+      data: data,
+      onCompleted: addAccessLevels,
+    })
+      .catch((err) => console.error(err))
       .finally(() => {
         dialogRef.current?.close();
-        setLoading(false);
       });
   };
 
   const handleReorder = useCallback(
     (newItems: AccessLevels[]) => {
       const ids = newItems.map((item) => item.id);
-      apiFetch<AccessLevels[]>("/access-levels/order", {
-        json: { ids },
-        method: "PUT",
-      })
-        .then(setAccessLevels)
-        .catch((err) => console.error(err));
+      handle({
+        method: "ORDER",
+        data: { ids },
+        onCompleted: setAccessLevels,
+      }).catch((err) => console.error(err));
     },
     [setAccessLevels],
   );
@@ -106,8 +107,8 @@ export default function AccessLevelsPage() {
                     justifyContent: "flex-end",
                   }}
                 >
-                  <Button disabled={loading} variant="primary" type="submit">
-                    {loading ? "Saving..." : "Save Changes"}
+                  <Button disabled={isLoading} variant="primary" type="submit">
+                    {isLoading ? "Saving..." : "Save Changes"}
                   </Button>
                 </div>
               </form>

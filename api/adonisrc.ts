@@ -48,7 +48,7 @@ export default defineConfig({
     () => import('@adonisjs/lucid/database_provider'),
     () => import('@adonisjs/session/session_provider'),
     () => import('@adonisjs/auth/auth_provider'),
-    () => import('@adonisjs/limiter/limiter_provider')
+    () => import('@adonisjs/limiter/limiter_provider'),
   ],
 
   /*
@@ -63,6 +63,7 @@ export default defineConfig({
     () => import('#start/routes/web'),
     () => import('#start/routes/auth'),
     () => import('#start/kernel'),
+    () => import('#start/macros/model_query_builder_macros'),
   ],
 
   /*
