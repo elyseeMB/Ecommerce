@@ -6,7 +6,6 @@ export const courseValidator = vine.compile(
     accessLevelId: vine.number().exists(existsInOrganization('access_levels')),
     difficultyId: vine.number().exists(existsInOrganization('difficulties')),
     statusId: vine.number().exists(existsInOrganization('statuses')),
-
     name: vine.string().maxLength(150),
     notes: vine.string().optional(),
   })

@@ -1,25 +1,52 @@
 import { apiFetch } from "@helpers/website";
 import { useAsyncEffect } from "../../hooks/useAsyncEffect.tsx";
-import { useAccount, useOrganization } from "../../store.tsx";
+import {
+  useAccount,
+  useCourses,
+  useOrganization,
+  useResource,
+} from "../../store.tsx";
 import type { FormEventHandler } from "react";
+import {
+  Button,
+  Dialog,
+  DialogDescription,
+  Icon,
+  Label,
+  Option,
+  Select,
+  useDialogRef,
+} from "@ui/website";
+import { SortableList } from "../../components/SortalbeResources.tsx";
+import { BlockCourses } from "../../components/BlockCourses.tsx";
+import type { Courses } from "@api/website/types";
 
 export default function CoursesPage() {
-  const account = useAccount();
-  const organization = useOrganization();
+  const { list: difficultiesList } = useResource("difficulties");
+  const { list: statusesList } = useResource("statuses");
+  const { list: accessLevelsList } = useResource("accessLevel");
+  const { list: coursesList, set: setCourses, add: addCourses } = useCourses();
 
-  console.log(organization);
+  // console.log({ difficultiesList, accessLevelsList, statusesList });
+  const dialogRef = useDialogRef();
 
   useAsyncEffect(async () => {
-    const data = await apiFetch("/courses");
-    console.log(data);
+    const data = await apiFetch<Courses[]>("/courses");
+    setCourses(data);
   }, []);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     const element = e.currentTarget;
     const form = new FormData(element);
-    const res = apiFetch("/courses", { json: Object.fromEntries(form) });
-    console.log(res);
+    apiFetch<Courses>("/courses", {
+      json: Object.fromEntries(form),
+    })
+      .then(addCourses)
+      .catch((err) => {
+        console.error("Error FetchCourse" + err);
+      });
+    dialogRef.current?.close();
   };
 
   const handleSubmitModules: FormEventHandler<HTMLFormElement> = (e) => {
@@ -45,135 +72,99 @@ export default function CoursesPage() {
   return (
     <>
       <div className="max-w-screen-lg m-auto">
-        <div className="bg-background text-foreground p-6 rounded-lg">
-          <h2 className="text-xl font-bold text-primary">Hello</h2>
-          <p className="text-muted-foreground">Ce texte est en muted</p>
-          <button className="bg-destructive text-destructive-foreground px-4 py-2 rounded-md">
-            Supprimer
-          </button>
-        </div>
+        <div className="py-3rem">
+          <div className="bg-card text-card-foreground rounded-xl p-4 shadow-opacity-50 border border-border">
+            <div className="flex justify-between mb-4">
+              <h2 className="text-xl font-bold text-primary">Courses</h2>
+              <Dialog
+                title="Add Access Level"
+                ref={dialogRef}
+                trigger={
+                  <span className="flex items-center gap-2 transition rounded-lg hover:underline cursor-pointer">
+                    <Icon name="Add" size={14} />
+                    Add Course
+                  </span>
+                }
+              >
+                <DialogDescription>
+                  Add a course to your organization.
+                </DialogDescription>
 
-        <h1 className="text-3xl text-foreground">Courses</h1>
+                <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+                  <fieldset>
+                    <Label name="name" label="Name Course" placeholder="Name" />
+                  </fieldset>
 
-        <div className="wrapper bg-card text-card-foreground rounded-xl p-4 shadow border border-border">
-          hello {account.fullName}
-          <form onSubmit={handleSubmit}>
-            <input
-              type="number"
-              name="accessLevelId"
-              placeholder="accessLevelId"
-            />
-            <input type="number" name="statusId" placeholder="statusId" />
-            <input
-              type="number"
-              name="difficultyId"
-              placeholder="difficultyId"
-            />
-            <input type="text" name="name" placeholder="name" />
-            <input type="text" name="notes" placeholder="notes" />
+                  <div className="flex flex-col gap-2">
+                    <span> AccessLevel </span>
+                    <select
+                      className="px-3 py-2 border border-slate-300 rounded"
+                      name="accessLevelId"
+                      defaultValue={accessLevelsList[0].id}
+                    >
+                      {accessLevelsList.map((accessLevel) => (
+                        <option key={accessLevel.id} value={accessLevel.id}>
+                          {accessLevel.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-            <button type="submit">envoyer</button>
-          </form>
-        </div>
+                  <div className="flex flex-col gap-2">
+                    <span> Difficulties </span>
+                    <select
+                      className="px-3 py-2 border border-slate-300 rounded"
+                      name="difficultyId"
+                      defaultValue={difficultiesList[0].id}
+                    >
+                      {difficultiesList.map((difficulty) => (
+                        <option key={difficulty.id} value={difficulty.id}>
+                          {difficulty.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-        <div className="wrapper bg-card text-card-foreground rounded-xl p-4 shadow border border-border">
-          <h1>Modules</h1>
-          <form onSubmit={handleSubmitModules}>
-            <input type="text" name="name" placeholder="module name" />
-            <input type="number" name="statusId" placeholder="statusId" />
+                  <div className="flex flex-col gap-2">
+                    <span> Statuses </span>
+                    <select
+                      className="px-3 py-2 border border-slate-300 rounded"
+                      name="statusId"
+                      defaultValue={statusesList[0].id}
+                    >
+                      {statusesList.map((status) => (
+                        <option key={status.id} value={status.id}>
+                          {status.name}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-            <button type="submit">envoyer</button>
-          </form>
-        </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      marginTop: 25,
+                      justifyContent: "flex-end",
+                    }}
+                  >
+                    <Button variant="primary" type="submit">
+                      "Save Changes"
+                    </Button>
+                  </div>
+                </form>
+              </Dialog>
+            </div>
 
-        <div className="wrapper bg-card text-card-foreground rounded-xl p-4 shadow border border-border">
-          <h1>Lessons</h1>
-          <form onSubmit={handleSubmitLessons}>
-            <input type="text" name="name" placeholder="lessons name" />
+            <BlockCourses courses={coursesList.courses} />
 
-            <input type="number" name="moduleId" placeholder="moduleId" />
-
-            <input
-              type="number"
-              name="accessLevelId"
-              placeholder="accessLevelId"
-            />
-
-            <input type="number" name="statusId" placeholder="statusId" />
-
-            <button type="submit">envoyer</button>
-          </form>
-        </div>
-
-        <div className="w-full max-w-screen-xl mx-auto bg-card text-card-foreground border border-border rounded-xl py-4 px-4">
-          <table className="w-full text-sm text-left border-collapse">
-            <thead>
-              <tr className="border-b border-border">
-                <th className="py-2 px-4 font-semibold text-foreground">
-                  Name
-                </th>
-                <th className="py-2 px-4 font-semibold text-foreground">
-                  Status
-                </th>
-                <th className="py-2 px-4 font-semibold text-foreground">
-                  Difficulty
-                </th>
-                <th className="py-2 px-4 font-semibold text-foreground">
-                  Access
-                </th>
-                <th className="py-2 px-4"></th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr className="border-b border-border hover:bg-muted">
-                <td className="py-2 px-4 text-primary hover:underline cursor-pointer">
-                  JavaScript Basics
-                </td>
-                <td className="py-2 px-4 text-foreground">Published</td>
-                <td className="py-2 px-4 text-foreground">Beginner</td>
-                <td className="py-2 px-4 text-foreground">Public</td>
-                <td className="py-2 px-4 text-right">
-                  <button className="text-muted-foreground hover:text-foreground">
-                    ⋮
-                  </button>
-                </td>
-              </tr>
-              <tr className="border-b border-border hover:bg-muted">
-                <td className="py-2 px-4 text-primary hover:underline cursor-pointer">
-                  Advanced CSS Grid
-                </td>
-                <td className="py-2 px-4 text-foreground">Draft</td>
-                <td className="py-2 px-4 text-foreground">Advanced</td>
-                <td className="py-2 px-4 text-foreground">Private</td>
-                <td className="py-2 px-4 text-right">
-                  <button className="text-muted-foreground hover:text-foreground">
-                    ⋮
-                  </button>
-                </td>
-              </tr>
-              <tr className="border-b border-border hover:bg-muted">
-                <td className="py-2 px-4 text-primary hover:underline cursor-pointer">
-                  React for Designers
-                </td>
-                <td className="py-2 px-4 text-foreground">Scheduled</td>
-                <td className="py-2 px-4 text-foreground">Intermediate</td>
-                <td className="py-2 px-4 text-foreground">Restricted</td>
-                <td className="py-2 px-4 text-right">
-                  <button className="text-muted-foreground hover:text-foreground">
-                    ⋮
-                  </button>
-                </td>
-              </tr>
-              <tr>
-                <td
-                  colSpan={5}
-                  className="py-6 text-center text-muted-foreground"
-                >
-                  Loading more courses...
-                </td>
-              </tr>
-            </tbody>
-          </table>
+            {/* <SortableList
+              type="accessLevel"
+              items={courses}
+              onReorder={(newItems) => {
+                console.log(newItems);
+              }}
+            /> */}
+          </div>
         </div>
       </div>
     </>

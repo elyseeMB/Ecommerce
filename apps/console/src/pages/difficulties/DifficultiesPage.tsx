@@ -16,8 +16,8 @@ import { useFetchResource } from "../../hooks/resource/useFetchResource.ts";
 export default function DifficultiesPage() {
   const {
     list: difficultiesList,
-    set: setdifficulties,
-    add: adddifficulties,
+    set: setDifficulties,
+    add: addDifficulties,
   } = useResource("difficulties");
   const [handle, isLoading] = useFetchResource("difficulties");
   const dialogRef = useDialogRef();
@@ -25,9 +25,9 @@ export default function DifficultiesPage() {
   const fetchDifficulties = useCallback(() => {
     handle({
       method: "GET",
-      onCompleted: setdifficulties,
+      onCompleted: setDifficulties,
     });
-  }, [setdifficulties]);
+  }, [setDifficulties]);
 
   useEffect(() => {
     if (difficultiesList.length === 0) {
@@ -43,7 +43,7 @@ export default function DifficultiesPage() {
     handle({
       method: "POST",
       data: data,
-      onCompleted: adddifficulties,
+      onCompleted: addDifficulties,
     })
       .catch((err) => console.error(err))
       .finally(() => {
@@ -57,10 +57,10 @@ export default function DifficultiesPage() {
       handle({
         method: "ORDER",
         data: { ids },
-        onCompleted: setdifficulties,
+        onCompleted: setDifficulties,
       }).catch((err) => console.error(err));
     },
-    [setdifficulties],
+    [setDifficulties],
   );
 
   return (

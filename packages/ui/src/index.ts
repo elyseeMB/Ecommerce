@@ -4,6 +4,7 @@ export { Skeleton } from "./stories/atoms/skeleton/Skeleton.tsx";
 export { Button } from "./stories/atoms/button/button.tsx";
 export { Field } from "./stories/molecules/field/Field.tsx";
 export { FormComponent } from "./stories/molecules/form/form.tsx";
+export { Option, Select } from "./stories/atoms/select/Select.tsx";
 
 // LAYOUTS
 export { AuthLayout } from "./layouts/auth/AuthLayout.tsx";

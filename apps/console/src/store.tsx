@@ -8,7 +8,12 @@ import {
 import { create, useStore as useZustandStore } from "zustand";
 import { combine, persist } from "zustand/middleware";
 import type { Account } from "./hooks/useAuth.ts";
-import type { AccessLevels, Difficulties, Statuses } from "@api/website/types";
+import type {
+  AccessLevels,
+  Courses,
+  Difficulties,
+  Statuses,
+} from "@api/website/types";
 
 export type ResourceMap = {
   accessLevel: AccessLevels;
@@ -22,11 +27,12 @@ type State = {
   accesslevels: AccessLevels[];
   difficulties: Difficulties[];
   statuses: Statuses[];
+  courses: Courses[];
 };
 
 function getStateKey<T extends keyof ResourceMap>(
   type: T,
-): keyof Omit<State, "account" | "organization"> {
+): keyof Omit<State, "account" | "organization" | "courses"> {
   switch (type) {
     case "accessLevel":
       return "accesslevels";
@@ -34,8 +40,9 @@ function getStateKey<T extends keyof ResourceMap>(
       return "difficulties";
     case "statuses":
       return "statuses";
+
     default:
-      throw new Error("Unknown resource type " + type);
+      throw new Error("Courses resource type " + type);
   }
 }
 
@@ -46,6 +53,7 @@ const createStore = () =>
         {
           account: undefined as undefined | null | Account,
           organization: {},
+          courses: [],
           accesslevels: [],
           difficulties: [],
           statuses: [],
@@ -88,6 +96,16 @@ const createStore = () =>
             const key = getStateKey(type);
             return set((state) => ({
               [key]: state[key].filter((item) => item.id !== id),
+            }));
+          },
+
+          setCourses: (courses: Courses[]) => {
+            set({ courses });
+          },
+
+          addCourse: (course: Courses) => {
+            set((state) => ({
+              courses: [...state.courses, course],
             }));
           },
 
@@ -166,6 +184,21 @@ export function useDifficulties() {
 // STATUSES
 export function useStatuses() {
   return useResource("statuses");
+}
+
+// COURSES
+export function useCourses() {
+  const list = useStore((state) => state.courses);
+  const setCourses = useStore((state) => state.setCourses);
+  const addCourses = useStore((state) => state.addCourse);
+
+  console.log(list);
+
+  return {
+    list,
+    set: (data: Courses[]) => setCourses(data),
+    add: (data: Courses) => addCourses(data),
+  };
 }
 
 // ORGANISATION
