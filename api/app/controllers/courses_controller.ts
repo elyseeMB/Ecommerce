@@ -7,7 +7,7 @@ import StoreCourse from '../actions/courses/store_course.js'
 export default class CoursesController {
   async index({ organization, response }: HttpContext) {
     const courses = await GetCourses.handle({ organization })
-    return response.json({ courses })
+    return response.json(courses)
   }
 
   async store({ request, response, organization }: HttpContext) {
@@ -23,5 +23,10 @@ export default class CoursesController {
       console.error('error courses_controller')
       return response.status(404).json('error courses_controller')
     }
+  }
+
+  update({ response, params }: HttpContext) {
+    console.log(params)
+    return response.json(params)
   }
 }

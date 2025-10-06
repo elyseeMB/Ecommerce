@@ -9,7 +9,6 @@ export async function apiFetch<T>(
     headers?: RequestInit["headers"];
   } = {},
 ) {
-  console.log(json);
   const endpoint = "http://localhost:3333";
   method ??= json ? "POST" : "GET";
   const body = json ? JSON.stringify(json) : undefined;

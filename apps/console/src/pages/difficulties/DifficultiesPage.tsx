@@ -33,7 +33,7 @@ export default function DifficultiesPage() {
     if (difficultiesList.length === 0) {
       fetchDifficulties();
     }
-  }, [difficultiesList]);
+  }, []);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();

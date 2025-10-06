@@ -10,6 +10,8 @@ function keyEndpoint<T extends keyof ResourceMap>(type: T) {
       return "/difficulties/";
     case "statuses":
       return "/statuses/";
+    case "courses":
+      return "/courses/";
     default:
       throw new Error("Unknow Endpoint");
   }
@@ -78,12 +80,12 @@ function Fetch<T extends keyof ResourceMap>(
           })
             .then((id) => {
               options.onCompleted?.(id);
-              setLoading(false);
             })
             .catch((err) => {
               console.error("Errorr method POST:", err);
               setLoading(false);
-            });
+            })
+            .finally(() => setLoading(false));
 
         case "PUT":
           return apiFetch<InferResourceType<T>>(url + options.id, {

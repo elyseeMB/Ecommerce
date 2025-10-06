@@ -20,6 +20,7 @@ import {
 import { SortableList } from "../../components/SortalbeResources.tsx";
 import { BlockCourses } from "../../components/BlockCourses.tsx";
 import type { Courses } from "@api/website/types";
+import { data } from "react-router";
 
 export default function CoursesPage() {
   const { list: difficultiesList } = useResource("difficulties");
@@ -155,15 +156,11 @@ export default function CoursesPage() {
               </Dialog>
             </div>
 
-            <BlockCourses courses={coursesList.courses} />
-
-            {/* <SortableList
-              type="accessLevel"
-              items={courses}
-              onReorder={(newItems) => {
-                console.log(newItems);
-              }}
-            /> */}
+            {coursesList.length > 0 ? (
+              <BlockCourses courses={coursesList} />
+            ) : (
+              <>Vous n'avez pas de course</>
+            )}
           </div>
         </div>
       </div>

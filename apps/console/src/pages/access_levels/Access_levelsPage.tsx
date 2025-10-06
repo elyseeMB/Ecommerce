@@ -32,7 +32,7 @@ export default function AccessLevelsPage() {
     if (accessLevelsList.length === 0) {
       fetchDifficulties();
     }
-  }, [accessLevelsList]);
+  }, []);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();

@@ -19,6 +19,7 @@ export type ResourceMap = {
   accessLevel: AccessLevels;
   difficulties: Difficulties;
   statuses: Statuses;
+  courses: Courses;
 };
 
 type State = {
@@ -32,7 +33,7 @@ type State = {
 
 function getStateKey<T extends keyof ResourceMap>(
   type: T,
-): keyof Omit<State, "account" | "organization" | "courses"> {
+): keyof Omit<State, "account" | "organization"> {
   switch (type) {
     case "accessLevel":
       return "accesslevels";
@@ -40,6 +41,8 @@ function getStateKey<T extends keyof ResourceMap>(
       return "difficulties";
     case "statuses":
       return "statuses";
+    case "courses":
+      return "courses";
 
     default:
       throw new Error("Courses resource type " + type);
@@ -191,8 +194,6 @@ export function useCourses() {
   const list = useStore((state) => state.courses);
   const setCourses = useStore((state) => state.setCourses);
   const addCourses = useStore((state) => state.addCourse);
-
-  console.log(list);
 
   return {
     list,

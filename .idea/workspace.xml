@@ -1,26 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="53315ae4-17cb-4db9-9fbe-2ecb295cb024" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/apps/console/src/layouts/MainLayout.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/console/src/layouts/MainLayout.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/dbnavigator.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dbnavigator.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/console/src/hooks/resource/useFetchResource.ts" beforeDir="false" afterPath="$PROJECT_DIR$/apps/console/src/hooks/resource/useFetchResource.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/console/src/pages/access_levels/Access_levelsPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/console/src/pages/access_levels/Access_levelsPage.tsx" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/apps/console/src/pages/courses/CoursesPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/console/src/pages/courses/CoursesPage.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/base/5/16750" beforeDir="false" afterPath="$PROJECT_DIR$/data/base/5/16750" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/base/5/16761" beforeDir="false" afterPath="$PROJECT_DIR$/data/base/5/16761" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/base/5/16767" beforeDir="false" afterPath="$PROJECT_DIR$/data/base/5/16767" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/base/5/16768" beforeDir="false" afterPath="$PROJECT_DIR$/data/base/5/16768" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/base/5/16772" beforeDir="false" afterPath="$PROJECT_DIR$/data/base/5/16772" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/base/5/16774" beforeDir="false" afterPath="$PROJECT_DIR$/data/base/5/16774" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/base/5/16775" beforeDir="false" afterPath="$PROJECT_DIR$/data/base/5/16775" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/base/5/16779" beforeDir="false" afterPath="$PROJECT_DIR$/data/base/5/16779" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/global/pg_control" beforeDir="false" afterPath="$PROJECT_DIR$/data/global/pg_control" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/pg_wal/000000010000000000000001" beforeDir="false" afterPath="$PROJECT_DIR$/data/pg_wal/000000010000000000000001" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/pg_xact/0000" beforeDir="false" afterPath="$PROJECT_DIR$/data/pg_xact/0000" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/data/postmaster.pid" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/ui/src/stories/Button.stories.ts" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/ui/src/stories/Button.tsx" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/ui/src/stories/button.css" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/ui/src/stories/organisms/table/Table.stories.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/ui/src/stories/organisms/table/Table.stories.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/packages/ui/src/stories/organisms/table/Table.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/packages/ui/src/stories/organisms/table/Table.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/console/src/pages/difficulties/DifficultiesPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/console/src/pages/difficulties/DifficultiesPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/apps/console/src/pages/statuses/StatusPage.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/apps/console/src/pages/statuses/StatusPage.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/packages/helpers/src/api.ts" beforeDir="false" afterPath="$PROJECT_DIR$/packages/helpers/src/api.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,9 +34,15 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "ref/tailwind",
+    "git-widget-placeholder": "ref-unocss",
+    "last_opened_file_path": "C:/Users/mbous/Desktop",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "pnpm",
     "settings.editor.selected.configurable": "configurable.group.appearance",
+    "ts.external.directory.path": "C:\\Users\\mbous\\OneDrive\\Desktop\\Tp\\JS\\Backend\\Ecommerce\\apps\\console\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -65,7 +63,25 @@
       <updated>1750336777379</updated>
       <workItem from="1750336780140" duration="9000" />
       <workItem from="1751395398545" duration="9000" />
+      <workItem from="1752866380653" duration="106000" />
+      <workItem from="1753652485019" duration="26000" />
+      <workItem from="1755732635708" duration="2000" />
+      <workItem from="1757774450870" duration="413000" />
     </task>
     <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

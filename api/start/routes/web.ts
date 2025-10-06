@@ -60,6 +60,7 @@ router
     /* COURSES */
     router.get('/courses', [CoursesController, 'index']).as('course.index')
     router.post('/courses', [CoursesController, 'store']).as('courses.store')
+    router.put('/courses/:id', [CoursesController, 'update'])
 
     /* MODULES */
     router.post('/courses/:courseId/modules', [ModulesController, 'store']).as('modules.stores')

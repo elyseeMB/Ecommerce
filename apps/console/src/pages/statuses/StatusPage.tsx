@@ -1,7 +1,5 @@
-import { apiFetch } from "@helpers/website";
-import { useAsyncEffect } from "../../hooks/useAsyncEffect.tsx";
 import { useCallback, useEffect, type FormEventHandler } from "react";
-import { useAccount, useOrganization, useResource } from "../../store.tsx";
+import { useResource } from "../../store.tsx";
 import { SortableList } from "../../components/SortalbeResources.tsx";
 import {
   Button,
@@ -34,7 +32,7 @@ export default function StatusesPage() {
     if (statusesList.length === 0) {
       fetchDifficulties();
     }
-  }, [statusesList]);
+  }, []);
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault();
